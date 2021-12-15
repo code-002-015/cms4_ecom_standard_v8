@@ -1,0 +1,8 @@
+node_modules
+public/lib
+public/vendor
+public/theme
+public/storage
+storage/app/public
+vendor
+.env

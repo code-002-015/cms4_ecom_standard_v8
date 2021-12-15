@@ -1,0 +1,3 @@
+{!! Setting::getFooter()->contents !!}
+
+
