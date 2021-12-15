@@ -1,0 +1,120 @@
+/*html, body {padding:0;margin:0;}*/
+/*body {word-wrap:break-word;font-family:'Montserrat';background:#fff;}*/
+/*img {max-width:100%;height:auto;}*/
+/*body *{text-shadow:none;}*/
+
+.scroll-content {height:100vh;}
+
+@import url('https://fonts.googleapis.com/css?family=Montserrat:300,400,700');
+
+#top {padding:5px 3px;position:fixed;bottom:50px;right:50px;display:none;cursor:pointer;z-index:9999;}
+#top img {height:50px;width:50px;opacity:.5;}
+#top img:hover {opacity:1;}
+
+.trigger, .content{text-align:center;}
+.trigger {font-weight:bold;color:#fff;width:100%;padding:0 50px;position:relative;z-index:9999;}
+.trigger.fixed {position:fixed;top:0;left:0;}
+.footer.fixed {position:fixed;bottom:0;left:0;}
+.trigger a {display:block;width:28px;height:18px;position:absolute;top:75px;right:25px;}
+.trigger a:before, .trigger a:after{content: '';display:block;background:#fff;height:2px;}
+.trigger a span {background:#fff;display:block;height:2px;margin:6px 0;}
+
+.mm-listview > li > a, .mm-listview > li > span {padding:10px 16px;color:#1a398b;}
+.mm-panels, .mm-panels > .mm-panel {background:#fff;}
+.mm-menu .mm-listview > li .mm-next::after {border-color:#fff;}
+.mm-menu .mm-navbar a, .mm-menu .mm-navbar > * {color:#1a398b;}
+.mm-menu .mm-btn::after, .mm-menu .mm-btn::before {border-color: #fff;}
+.mm-listview > li, .mm-listview > li .mm-next, .mm-listview > li .mm-next::before, .mm-listview > li::after {border:none !important;}
+
+.nav-wrapper {background:rgba(0,0,0,0);padding:25px 0;position:absolute;top:auto;left:0;right:0;z-index:999;}
+#menu-desk {width: 100%;text-align:right;}
+	#menu-desk > ul {padding:0;margin:20px 0 0 0;}
+	#menu-desk > ul > li:last-child {border:none;}
+	#menu-desk > ul > li {list-style:none;text-align:center;vertical-align:middle;position:relative;display:inline-block;margin:0 10px;}
+	#menu-desk > ul > li > a {display:block;text-decoration:none;padding:0 0 10px 0;font:400 15px 'Montserrat';color:#fff;text-transform:uppercase;border-bottom:solid 2px transparent;}
+	#menu-desk > ul > li > span {display:block;text-decoration:none;padding:0 0 10px 0;font:400 15px 'Montserrat';color:#fff;text-transform:uppercase;border-bottom:solid 2px transparent;}
+	#menu-desk > ul > li:hover > a, #menu-desk > ul > li:hover > span {color:#fff;border-color:#fff;}
+	#menu-desk > ul > li > a.active, #menu-desk > ul > li > span.active {color:#fff;border-color:#fff;}
+
+	#menu-desk ul ul {display:none;padding:32px 0 0 0;position:absolute;z-index:9;}
+	#menu-desk ul ul li {list-style:none;text-align:left;float:left;position:relative;border:0;width:15em;left:2px;overflow:hidden;}
+	#menu-desk ul ul li a {text-decoration:none;padding:10px 15px;display:block;font:400 13px 'Montserrat';color:#fff;background:#1a398b;}
+	#menu-desk ul ul li:hover a {color:#1a398b;background:#fff;}
+	#menu-desk ul ul li:hover {}
+
+	#menu-desk ul ul ul {position:absolute;left:100%;top:0;}
+
+.trigger a {display:none;}
+
+.banner-wrapper, .sub-banner {}
+	.banner-caption {display: none;-vendor-animation-duration: 3s;-vendor-animation-delay: 0s;-vendor-animation-iteration-count: infinite;
+	position:absolute;left:0;right:0;bottom:40vh;text-align:center;z-index:9999;max-width:960px;margin:0 auto;}
+	.banner-caption h2 {font:700 50px 'Montserrat';color:#fff;padding:0;margin:0 auto;text-transform:uppercase;line-height:1;}
+	.banner-caption p {font:300 18px 'Montserrat';color:#fff;padding:0;margin:15px 0 2em 0;line-height:1.35;}
+	.banner-caption a {font:300 12px 'Montserrat';color:#fff;padding:16px 30px;margin:0;background:#1a398b;border-radius:5px;text-transform:uppercase;text-decoration:none;transition:all 0.1s ease-in-out;}
+	.banner-caption a:hover {background:#1a398b;color:#fff;}
+	.owl-dots {position: absolute;bottom:0;text-align: center;margin: 0px auto;right: 0px;left: 0px;}
+
+.devs {padding:15px 0;background:#1f1c18;text-align:center;}
+.devs p {font:300 12px 'Montserrat';color:#999;padding:0;margin:6px 0;text-transform:capitalize;}
+.devs a {color:#fff;}
+
+.subpage-wrap {padding:50px 0;min-height:700px;}
+.subpage-wrap h2 {font:700 28px 'Montserrat';color:#1a398b;padding:0;margin:0 0 20px 0;text-decoration:none;text-transform:capitalize;}
+.subpage-wrap p {color:#111;margin:15px 0;padding:0;font:400 14px 'Montserrat';line-height:1.75;}
+
+.sidenav {margin-bottom:2em;}
+.sidenav > ul {margin:0;padding:0;}
+.sidenav li {list-style:none;}
+.sidenav a {color:#666;display:block;padding:10px;text-decoration:none;font:400 15px 'Montserrat';text-transform:capitalize;border-bottom:dotted 1px #ddd;transition: all .1s ease-in-out;}
+.sidenav a.active, .sidenav a:hover {background:#1a398b;color:#fff;padding-left:20px;}
+
+@media only screen and (min-width:1025px) {
+	#sticky, #sticky-phantom {}
+	#sticky-phantom {display: none;}
+	#sticky.stick {transition: all .2s ease-in-out;position: fixed;top:0;right:0;left:0;width:100%;margin:0 auto;z-index:9999;
+	-webkit-box-shadow: 0px 3px 30px 0px rgba(0,0,0,0.2);
+	-moz-box-shadow: 0px 3px 30px 0px rgba(0,0,0,0.2);
+	box-shadow: 0px 3px 30px 0px rgba(0,0,0,0.2);}
+	#sticky.stick .nav-wrapper {background:rgba(26,57,139,0.95);padding:15px 0;}
+}
+
+@media only screen and (max-width:1366px) {
+	.banner-caption {max-width:900px;bottom:20vh;}
+	.banner-caption h2 {font:700 45px 'Montserrat';}
+	.banner-caption p {font:300 18px 'Montserrat';}
+}
+
+@media only screen and (max-width:1024px) {
+	#menu-desk ul {text-align:left;}
+	.trigger a {display:block;top:70px;right:30px;}
+	.banner-caption {max-width:700px;bottom:100px;bottom:50px;}
+	.banner-caption h2 {font:700 30px 'Montserrat';}
+	.banner-caption p {font:300 14px 'Montserrat';line-height:1.5;}
+	.banner-caption a {padding:8px 16px;}
+
+	.nav-wrapper {position:relative;background:#222;}
+	.intro-wrapper {padding:5rem 3rem;}
+	.intro-content h2 {font-size:35px;}
+	.testi-content {margin:30px 0;}
+	.nav-social {display:none;}
+
+	.intro-serv img {float:none;margin:0 0 20px 0;display:block;width:80px;}
+	.tagline-content {margin:20px 0;text-align:center;}
+	.tagline-content img {width:50%;}
+	.tagline-content .dvdr {margin:0 auto 30px auto;}
+	.footer-contact {margin:20px 0;}
+}
+
+@media only screen and (max-width:767px) {
+	.banner-caption {display:none !important;}
+	.trigger a {display:block;top:30px;right:30px;}
+	.footer-wrapper, .testi-wrapper, .practice-wrapper, .tagline-wrapper, .subpage-wrap {padding:4rem 2rem;}
+	.intro-wrapper {text-align:left;padding:3rem 2rem;}
+	.intro-content h3 {line-height:1.25;}
+	.footer-contact {margin-bottom:15px;}
+	.toploc-wrapper {display:none;}
+	.intro-serv {text-align:center;}
+	.intro-serv img {margin:0 auto 30px auto;}
+	.tagline-content img {width:100%;}
+}
