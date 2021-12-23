@@ -252,7 +252,12 @@ return [
 
         // Ecommerce Models
         'ProductCategory' => App\Models\ProductCategory::class,
+        'Product' => App\Models\Product::class,
+        'SalesHeader' => App\Models\SalesHeader::class,
+        'SalesDetail' => App\Models\SalesDetail::class,
         'SalesPayment' => App\Models\SalesPayment::class,
+        'Coupon' => App\Models\Coupon::class,
+        'CouponSale' => App\Models\CouponSale::class,
 
 
 

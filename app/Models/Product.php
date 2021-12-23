@@ -84,7 +84,7 @@ class Product extends Model
         if(empty($in))
             $in=0;
 
-        $cart = \App\EcommerceModel\Cart::where('product_id',$this->id)->sum('qty');
+        $cart = \App\Models\Cart::where('product_id',$this->id)->sum('qty');
          if(empty($cart))
             $cart=0;
 

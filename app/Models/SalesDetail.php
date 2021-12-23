@@ -5,8 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-use App\Models\User;
-
 class SalesDetail extends Model
 {
     use SoftDeletes;
@@ -22,17 +20,17 @@ class SalesDetail extends Model
 
     public function product()
     {
-        return $this->belongsTo('\App\Models\Product');
+        return $this->belongsTo(Product::class);
     }
 
     public function header()
     {
-        return $this->belongsTo('\App\Models\SalesHeader', 'sales_header_id');
+        return $this->belongsTo(SalesHeader::class, 'sales_header_id');
     }
 
     public function category()
     {
-        return $this->belongsTo('\App\Models\ProductCategory','product_category');
+        return $this->belongsTo(ProductCategory::class,'product_category');
     }
 
     public function getItemTotalPriceAttribute()
