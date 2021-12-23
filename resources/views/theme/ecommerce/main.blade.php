@@ -75,6 +75,15 @@
 
 	<!-- Footer Scripts
 	============================================= -->
+    <script type="text/javascript">
+        var bannerFxIn = "bounceIn";
+        var bannerFxOut = "bounceOut";
+        var bannerCaptionFxIn = "fadeInUp";
+        var autoPlayTimeout = 4000;
+        var bannerID = "banner";
+        var app_url = "{{ env('APP_URL') }}";
+    </script>
+
 	<script src="{{ asset('theme/ecommerce/js/functions.js') }}"></script>
 
 	<!-- ADD-ONS JS FILES -->
@@ -97,7 +106,7 @@
 
             $.ajax({
                 data: {
-                    "product_id": product, 
+                    "product_id": product,
                     "qty": qty,
                     "_token": "{{ csrf_token() }}",
                 },
@@ -114,9 +123,9 @@
 
 
                         $.notify("Product Added to your cart",
-                            { 
-                                position:"bottom right", 
-                                className: "success" 
+                            {
+                                position:"bottom right",
+                                className: "success"
                             }
                         );
                         $('#btn'+product).html('<i class="fa fa-cart-plus bg-warning text-light p-1 rounded" title="Already added on cart"></i>');
@@ -129,9 +138,9 @@
                             text: "We have insufficient inventory for this item.",
                             type: "warning",
                             showCancelButton: true,
-                            timerProgressBar: true, 
+                            timerProgressBar: true,
                             closeOnCancel: false
-                            
+
                         });
                     }
                 },
