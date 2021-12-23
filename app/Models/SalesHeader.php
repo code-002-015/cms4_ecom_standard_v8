@@ -5,8 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-use App\Models\User;
-
 class SalesHeader extends Model
 {
     use SoftDeletes;
@@ -14,7 +12,7 @@ class SalesHeader extends Model
     protected $table = 'ecommerce_sales_headers';
     protected $fillable = ['user_id', 'order_number', 'response_code', 'customer_name', 'customer_contact_number', 'customer_address', 'customer_delivery_adress', 'delivery_tracking_number', 'delivery_fee_amount', 'delivery_courier', 'delivery_type',
         'gross_amount', 'tax_amount', 'net_amount', 'discount_amount', 'payment_status',
-        'delivery_status', 'status','other_instruction'];
+        'delivery_status', 'status','other_instruction','customer_type'];
 
     public function user()
     {
@@ -47,11 +45,11 @@ class SalesHeader extends Model
     }
 
     public function items(){
-    	return $this->hasMany('App\Models\SalesDetail','sales_header_id');
+    	return $this->hasMany(SalesDetail::class,'sales_header_id');
     }
 
     public function deliveries(){
-        return $this->hasMany('App\Models\DeliveryStatus','order_id');
+        return $this->hasMany(DeliveryStatus::class,'order_id');
     }
 
     public function customer_details(){
@@ -74,9 +72,9 @@ class SalesHeader extends Model
 
     }
 
-    public static function first_payment($id){
-        $data = \App\Models\Ecommerce\Sales::where('sales_header_id',$id)->get();
-        return $data;
-    }
+    // public static function first_payment($id){
+    //     $data = \App\EcommerceModel\Sales::where('sales_header_id',$id)->get();
+    //     return $data;
+    // }
 
 }
