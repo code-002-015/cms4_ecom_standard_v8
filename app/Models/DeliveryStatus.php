@@ -4,8 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-use App\Models\ActivityLog;
-
 class DeliveryStatus extends Model
 {
 
@@ -20,7 +18,6 @@ class DeliveryStatus extends Model
 
     public function sales()
 	{
-	    return $this->belongsTo('App\Models\SalesHeader','order_id');
+	    return $this->belongsTo(SalesHeader::class,'order_id');
 	}
-
 }

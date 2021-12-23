@@ -31,6 +31,9 @@
 	============================================= -->
 	<title>Shop Demo | Canvas</title>
 
+
+	@yield('pagecss')
+
 </head>
 
 <body class="stretched">

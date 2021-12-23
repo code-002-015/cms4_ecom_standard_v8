@@ -109,6 +109,15 @@
         <a href="{{ route('ecom-dashboard') }}" class="nav-link"><i data-feather="home"></i><span>Dashboard</span></a>
     </li>
 
+    @if (auth()->user()->has_access_to_module('sales_transaction'))
+        <li class="nav-item with-sub @if (request()->routeIs('sales-transaction*')) active show @endif">
+            <a href="" class="nav-link"><i data-feather="users"></i> <span>Sales Transaction</span></a>
+            <ul>
+                <li @if (\Route::current()->getName() == 'sales-transaction.index') class="active" @endif><a href="{{ route('sales-transaction.index') }}">Manage Sales Transaction</a></li>
+            </ul>
+        </li>
+    @endif
+
     @if(auth()->user()->has_access_to_module('products') || auth()->user()->has_access_to_module('product_category'))
         <li class="nav-item with-sub @if (request()->routeIs('products*') || request()->routeIs('product-categories*')) active show @endif">
             <a href="" class="nav-link"><i data-feather="box"></i> <span>Products</span></a>
@@ -160,6 +169,16 @@
                 @if (auth()->user()->has_access_to_route('locations.create'))
                     <li @if (\Route::current()->getName() == 'locations.create') class="active" @endif><a href="{{ route('locations.create') }}">Create New Flat Rate</a></li>
                 @endif
+            </ul>
+        </li>
+    @endif
+
+    @if (auth()->user()->has_access_to_module('coupons'))
+        <li class="nav-item with-sub @if (request()->routeIs('coupons*')) active show @endif">
+            <a href="" class="nav-link"><i data-feather="users"></i> <span>Coupons</span></a>
+            <ul>
+                <li @if (\Route::current()->getName() == 'coupons.index' || \Route::current()->getName() == 'coupons.edit') class="active" @endif><a href="{{ route('coupons.index') }}">Manage Coupons</a></li>
+                <li @if (\Route::current()->getName() == 'coupons.create') class="active" @endif><a href="{{ route('coupons.create') }}">Create a Coupon</a></li>
             </ul>
         </li>
     @endif

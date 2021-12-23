@@ -43,8 +43,14 @@ use App\Http\Controllers\EcommerceControllers\PromoController;
 use App\Http\Controllers\EcommerceControllers\FavoriteController;
 use App\Http\Controllers\EcommerceControllers\WishlistController;
 
+use App\Http\Controllers\EcommerceControllers\CheckoutController;
+use App\Http\Controllers\EcommerceControllers\ReportsController;
+use App\Http\Controllers\EcommerceControllers\SalesController;
 use App\Http\Controllers\EcommerceControllers\CartController;
 use App\Http\Controllers\EcommerceControllers\ShopController;
+
+
+use App\Http\Controllers\EcommerceControllers\CouponController;
 
 
 use App\Http\Controllers\EcommerceControllers\CustomerFrontController;
@@ -61,9 +67,9 @@ use App\Http\Controllers\EcommerceControllers\CustomerFrontController;
 |
 */
 
-Route::get('/', function () {
-    return redirect(route('home'));
-});
+// Route::get('/', function () {
+//     return redirect(route('home'));
+// });
 
 
 
@@ -114,19 +120,42 @@ Route::get('/request-demo/{id}',[FrontController::class, 'request_for_demo'])->n
     
 
     Route::get('/shop', [ShopController::class, 'index'])->name('shop');
-    Route::post('cart/add-product',[CartController::class, 'store'])->name('cart.add');
-
-    Route::get('/cart', [CartController::class, 'view'])->name('cart.front.show');
-
+    
 
     Route::get('/products/{slug}', [ProductFrontController::class, 'show'])->name('product.front.show');
+
+
+
+
+
+    
+
+
+    // Cart
+        Route::get('/cart', [CartController::class, 'cart'])->name('cart.front.show');
+        Route::post('cart-add-product',[CartController::class, 'add_to_cart'])->name('cart.add');
+        Route::post('cart-remove-product', [CartController::class, 'remove_product'])->name('cart.remove_product');
+        Route::post('cart-update', [CartController::class, 'cart_update'])->name('cart.update');
+
+
+        Route::post('cart/deduct-qty','EcommerceControllers\CartController@deduct_qty')->name('cart.deduct');
+
+        Route::post('cart/proceed-checkout','EcommerceControllers\CartController@proceed_checkout')->name('cart.front.proceed_checkout');
+        
+    //
 //
 
 
 
+// CUSTOMER ROUTES
+Route::group(['middleware' => ['authenticated']], function () {
+    Route::get('/checkout', [CartController::class, 'checkout'])->name('cart.front.checkout');
+    Route::post('/temp_save',[CartController::class, 'save_sales'])->name('cart.temp_sales');
+});
 
 
 
+// ADMIN ROUTES
 Route::group(['prefix' => env('APP_PANEL', 'cerebro')], function (){
     Route::get('/', [LoginController::class, 'showLoginForm'])->name('panel.login');
 
@@ -303,9 +332,49 @@ Route::group(['prefix' => env('APP_PANEL', 'cerebro')], function (){
                 Route::post('/admin/location-multiple-delete',[DeliverablecitiesController::class, 'multiple_delete'])->name('location.multiple.delete');
             //
 
+            // Coupon
+                Route::resource('/coupons',CouponController::class);
+                Route::get('/coupon/{id}/{status}', [CouponController::class, 'update_status'])->name('coupon.change-status');
+                Route::post('/coupon-single-delete', [CouponController::class, 'single_delete'])->name('coupon.single.delete');
+                Route::get('/coupon-restore/{id}', [CouponController::class, 'restore'])->name('coupon.restore');
+                Route::post('/coupon-multiple-change-status',[CouponController::class, 'multiple_change_status'])->name('coupon.multiple.change.status');
+                Route::post('/coupon-multiple-delete',[CouponController::class, 'multiple_delete'])->name('coupon.multiple.delete');
+
+                Route::get('/get-product-brands', [CouponFrontController::class, 'get_brands'])->name('display.product-brands');
+                Route::get('/coupon-download-template', [CouponController::class, 'download_coupon_template'])->name('coupon.download.template');
+            //
+
+            // Sales Transaction
+                Route::resource('/admin/sales-transaction', SalesController::class);
+                Route::post('/admin/sales-transaction/change-status', [SalesController::class, 'change_status'])->name('sales-transaction.change.status');
+                Route::post('/admin/sales-transaction/{sales}', [SalesController::class, 'quick_update'])->name('sales-transaction.quick_update');
+                Route::get('/admin/sales-transaction/view/{sales}', [SalesController::class, 'show'])->name('sales-transaction.view');
+                Route::post('/admin/change-delivery-status', [SalesController::class, 'delivery_status'])->name('sales-transaction.delivery_status');
 
 
-            Route::get('/report/stock-card/{id}', 'EcommerceControllers\ReportsController@stock_card')->name('report.product.stockcard');
+                Route::get('/admin/sales-transaction/view-payment/{sales}', [SalesController::class, 'view_payment'])->name('sales-transaction.view_payment');
+                Route::post('/admin/sales-transaction/cancel-product', [SalesController::class, 'cancel_product'])->name('sales-transaction.cancel_product');
+                Route::get('/sales-advance-search/', [SalesController::class, 'advance_index'])->name('admin.sales.list.advance-search');
+
+
+                Route::get('/admin/report/sales', [ReportsController::class, 'sales'])->name('admin.report.sales');
+                Route::get('/admin/report/sales_summary', [ReportsController::class, 'sales_summary'])->name('report.sales.summary');
+                Route::get('/admin/report/delivery_status', [ReportsController::class, 'delivery_status'])->name('admin.report.delivery_status');
+                Route::get('/admin/report/delivery_report/{id}', [ReportsController::class, 'delivery_report'])->name('admin.report.delivery_report');
+
+                Route::get('/admin/sales-transaction/view-payment/{sales}', [SalesController::class, 'view_payment'])->name('sales-transaction.view_payment');
+                Route::post('/admin/sales-transaction/cancel-product', [SalesController::class, 'cancel_product'])->name('sales-transaction.cancel_product');
+
+                Route::post('/admin/payment-add-store',[SalesController::class, 'payment_add_store'])->name('payment.add.store');
+                Route::get('/display-added-payments', [SalesController::class, 'display_payments'])->name('display.added-payments');
+                Route::get('/display-delivery-history', [SalesController::class, 'display_delivery'])->name('display.delivery-history');
+
+                Route::get('/sales/update-payment/{id}','EcommerceControllers\JoborderController@staff_edit_payment')->name('staff-edit-payment');
+                Route::post('/sales/update-payment','EcommerceControllers\JoborderController@staff_update_payment')->name('staff-update-payment');
+            //
+
+
+            Route::get('/report/stock-card/{id}', [ReportsController::class, 'stock_card'])->name('report.product.stockcard');
         ###### Ecommerce Standard Routes ######
 
 

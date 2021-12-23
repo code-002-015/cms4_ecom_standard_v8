@@ -15,6 +15,7 @@ use App\Helpers\PaynamicsHelper;
 
 
 // Models
+use App\Models\Deliverablecities;
 use App\Models\SalesPayment;
 use App\Models\SalesHeader;
 use App\Models\SalesDetail;
@@ -23,11 +24,11 @@ use App\Models\Product;
 use App\Models\Cart;
 
 
-// use App\Models\CouponCartDiscount;
-// use App\Models\CustomerCoupon;
-// use App\Models\CouponCart;
-// use App\Models\CouponSale;
-// use App\Models\Coupon;
+use App\Models\CouponCartDiscount;
+use App\Models\CustomerCoupon;
+use App\Models\CouponCart;
+use App\Models\CouponSale;
+use App\Models\Coupon;
 
 use App\Models\PaynamicsLog;
 use App\Models\Page;
@@ -42,7 +43,7 @@ use DB;
 
 class CartController extends Controller
 {
-    public function store(Request $request)
+    public function add_to_cart(Request $request)
     {       
         $product = Product::whereId($request->product_id)->first();
 
@@ -81,9 +82,7 @@ class CartController extends Controller
                 ]);
             }
 
-        } 
-        else 
-        {
+        } else {
             $cart = session('cart', []);
             $not_exist = true;
 
@@ -126,12 +125,16 @@ class CartController extends Controller
         }
     }
 
-    public function view()
+    public function cart()
     {   
         if (auth()->check()) {
+
+            // reset coupon carts of customer
+            CouponCartDiscount::where('customer_id',Auth::id())->delete();
+            CouponCart::where('customer_id',Auth::id())->delete();
+
             $cart = Cart::where('user_id',Auth::id())->get();
             $totalProducts = $cart->count();
-
         } else {
             $cart = session('cart', []);
             $totalProducts = count(session('cart', []));
@@ -139,44 +142,41 @@ class CartController extends Controller
 
         $page = new Page();
         $page->name = 'Cart';
-        //$coupons = Coupon::where('status','ACTIVE')->where('activation_type','auto')->get();
 
-
-        //return view('theme.'.env('FRONTEND_TEMPLATE').'.ecommerce.cart.cart', compact('cart', 'totalProducts','page','coupons'));
         return view('theme.ecommerce.pages.cart', compact('cart', 'totalProducts','page'));
     }
 
     public function remove_product(Request $request)
     {
-
         if (auth()->check()) {
-            $delete = Cart::whereId($request->product_remove_id)->delete();
+            Cart::whereId($request->order_id)->delete();
         } else {
             $cart = session('cart', []);
-            $index = (int) $request->product_remove_id;
+            $index = (int) $request->order_id;
             if (isset($cart[$index])) {
                 unset($cart[$index]);
             }
             session(['cart' => $cart]);
         }
 
-        return back();
+        return back()->with('cart_success', 'Product has been removed.');
     }
 
 
-    public function ajax_update(Request $request)
+    public function cart_update(Request $request)
     {
         if (auth()->check()) {            
             if (Cart::where('user_id', auth()->id())->count() == 0) {
                 return;
             }
-            $upd = Cart::where('product_id',$request->record_id)->where('user_id', auth()->id());
 
-            $upd->update([
+            $qry = Cart::find($request->orderID);
+
+            $qry->update([
                 'qty' => $request->quantity
             ]);
 
-            $cart_qty = $upd->first();
+            $cart_qty = $qry->first();
 
             $price_before = $cart_qty->product->price*$cart_qty->qty;
 
@@ -184,7 +184,9 @@ class CartController extends Controller
             $carts = Cart::where('user_id', auth()->id())->get();
             $total_promo_discount = 0;
             $subtotal = 0;
+
             foreach($carts as $cart){
+
                 $promo_discount = $cart->product->price-$cart->product->discountedprice;
                 $total_promo_discount += $promo_discount*$cart->qty;
                 $subtotal += $cart->product->price*$cart->qty;
@@ -192,7 +194,7 @@ class CartController extends Controller
         } else {
             $cart = session('cart', []);
                 foreach ($cart as $key => $order) {
-                    if ($order->product_id == $request->record_id) {
+                    if ($order->product_id == $request->orderID) {
                         $cart[$key]->qty = $request->quantity;
                         break;
                     }
@@ -202,69 +204,34 @@ class CartController extends Controller
 
         return response()->json([
             'success' => true,
-            'total_promo_discount' => $total_promo_discount,
-            'subtotal' => $subtotal,
-            'recordid' => $request->record_id,
-            'price_before' => $price_before        
+            // 'total_promo_discount' => $total_promo_discount,
+            // 'subtotal' => $subtotal,
+            // 'recordid' => $request->orderID,
+            // 'price_before' => $price_before        
         ]);
     }
 
-    public function batch_update(Request $request)
+    public function checkout()
     {
-        if (auth()->check()) {            
+        if(auth()->check()){            
             if (Cart::where('user_id', auth()->id())->count() == 0) {
                 return redirect()->route('product.front.list');
             }
 
-            for ($x = 1; $x <= $request->total_products; $x++) {
-                $upd = Cart::whereId($request->record_id[$x])->where('user_id', auth()->id())->update([
-                    'qty' => $request->quantity[$x]
-                ]);
-              
+            if(Auth::user()->role_id <> 6){
+                abort(403, 'Administrator accounts are not authorized to create sales transactions.');
             }
 
-            CouponCart::where('customer_id',Auth::id())->delete();
-            if($request->coupon_counter > 0){
-                $data = $request->all();
-                $coupons = $data['couponid'];
-                $product = $data['coupon_productid'];
-                $usage = $data['couponUsage'];
 
-                foreach($coupons as $key => $c){
-                    $coupon = Coupon::find($c);
+            $page = new Page();
+            $page->name = 'Checkout';
 
-                    if($coupon->status == 'ACTIVE'){
-                        CouponCart::create([
-                            'coupon_id' => $coupon->id,
-                            'product_id' => $product[$key] == 0 ? NULL : $product[$key],
-                            'customer_id' => Auth::id(),
-                            'total_usage' => $usage[$key]
-                        ]);
-                    }
-                }
-            }
+            $orders = Cart::where('user_id',Auth::id())->get();      
+            $locations = Deliverablecities::where('status','PUBLISHED')->orderBy('name')->get();
 
-            CouponCartDiscount::where('customer_id',Auth::id())->delete();
-            CouponCartDiscount::create([
-                'customer_id' => Auth::id(),
-                'coupon_discount' => $request->coupon_total_discount
-            ]);
+            return view('theme.ecommerce.pages.checkout', compact('orders','locations','page'));
 
-            return redirect()->route('cart.front.checkout');
         } else {
-            $cart = session('cart', []);
-
-            for ($x = 1; $x <= $request->total_products; $x++) {
-                foreach ($cart as $key => $order) {
-                    if ($order->product_id == $request->record_id[$x]) {
-                        $cart[$key]->qty = $request->quantity[$x];
-                        break;
-                    }
-                }
-            }
-
-            session(['cart' => $cart]);
-
             return redirect()->route('customer-front.login');
         }
     }
@@ -307,22 +274,16 @@ class CartController extends Controller
         if($total_cart_items == 0){
             return redirect()->route('profile.sales');
         }
+
         $customer_delivery_adress = $request->delivery_address ?? ' ';
         $customer_name = Auth::user()->fullName;
         $customer_contact_number =  $request->mobile ?? Auth::user()->mobile;
         
-        $coupon_total_discount = number_format($request->coupon_total_discount,2,'.','');
+        //$coupon_total_discount = number_format($request->coupon_total_discount,2,'.','');
+        $coupon_total_discount = 0;
 
         $totalPrice = $request->total_amount;
         $requestId = $this->next_order_number();  
-        $member = Auth::user();
-
-
-        $cdata = Auth::user();
-        $custype = 'personal';
-        if($cdata->customer_type == 'business' && $cdata->is_verified == 1){
-            $custype = 'business';
-        }
 
         $salesHeader = SalesHeader::create([
             'user_id' => auth()->id(),
@@ -335,7 +296,7 @@ class CartController extends Controller
             'delivery_fee_amount' => number_format($request->delivery_fee,2,'.',''),
             'other_instruction' => $request->instruction,
             'delivery_courier' => ' ',
-            'delivery_type' => $request->shipping_type,
+            'delivery_type' => 'd2d',
             'gross_amount' => number_format($totalPrice,2,'.','') ,
             'tax_amount' => 0,
             'net_amount' => number_format($totalPrice,2,'.',''),
@@ -343,7 +304,6 @@ class CartController extends Controller
             'payment_status' => 'UNPAID',
             'delivery_status' => 'Waiting for Payment',
             'status' => 'active',
-            'customer_type' => $custype
         ]);
      
         $carts = Cart::where('user_id',Auth::id())->get();
@@ -359,13 +319,13 @@ class CartController extends Controller
             $totalQty += $cart->qty;
 
             $product = $cart->product;
-            $gross_amount = (number_format($product->discountedprice,2,'.','') * $cart->qty);
+            $gross_amount = (number_format($cart->price,2,'.','') * $cart->qty);
             $tax_amount = $gross_amount - ($gross_amount/1.12);
             $grand_gross += $gross_amount;
             $grand_tax += $tax_amount;
 
 
-            $data['price'] = number_format($product->discountedprice,2,'.','');
+            $data['price'] = number_format($cart->price,2,'.','');
             $data['tax'] = $data['price'] - ($data['price']/1.12);
             $data['other_cost'] = 0;
             $data['net_price'] = $data['price'] - ($data['tax'] + $data['other_cost']);
@@ -375,7 +335,7 @@ class CartController extends Controller
                 'product_id' => $product->id,
                 'product_name' => $product->name,
                 'product_category' => $product->category_id,
-                'price' => number_format($product->discountedprice,2,'.',''),              
+                'price' => number_format($cart->price,2,'.',''),              
                 'tax_amount' => number_format($tax_amount,2,'.',''),
                 'promo_id' => 0,
                 'promo_description' => '',
@@ -389,39 +349,39 @@ class CartController extends Controller
           
         }
       
-        $urls = [
-            'notification' => route('cart.payment-notification'),
-            'result' => route('profile.sales'),
-            'cancel' => route('profile.sales'),
-        ];
+        // $urls = [
+        //     'notification' => route('cart.payment-notification'),
+        //     'result' => route('profile.sales'),
+        //     'cancel' => route('profile.sales'),
+        // ];
         
-        if($request->coupon_counter > 0){
-            $data = $request->all();
-            $coupons = $data['couponid'];
-            foreach($coupons as $coupon){
-                $exist = CouponCart::where('customer_id',Auth::id())->where('coupon_id',$coupon)->exists();
-                if(!$exist){
-                   CouponCart::create([
-                        'coupon_id' => $coupon,
-                        'customer_id' => Auth::id()
-                    ]); 
-                } 
-            }
-        }
+        // if($request->coupon_counter > 0){
+        //     $data = $request->all();
+        //     $coupons = $data['couponid'];
+        //     foreach($coupons as $coupon){
+        //         $exist = CouponCart::where('customer_id',Auth::id())->where('coupon_id',$coupon)->exists();
+        //         if(!$exist){
+        //            CouponCart::create([
+        //                 'coupon_id' => $coupon,
+        //                 'customer_id' => Auth::id()
+        //             ]); 
+        //         } 
+        //     }
+        // }
 
-        $base64Code = PaynamicsHelper::payNow($requestId, Auth::user(), $carts, $totalPrice, $urls, false ,$request->delivery_fee, $coupon_total_discount);
+        // $base64Code = PaynamicsHelper::payNow($requestId, Auth::user(), $carts, $totalPrice, $urls, false ,$request->delivery_fee, $coupon_total_discount);
 
         Cart::where('user_id', Auth::id())->delete();
-        if($base64Code){
-            if($request->coupon_counter > 0){
-                $this->update_coupon_status($request,$salesHeader->id);    
-            }
-        }
+        // if($base64Code){
+        //     if($request->coupon_counter > 0){
+        //         $this->update_coupon_status($request,$salesHeader->id);    
+        //     }
+        // }
         
-        Mail::to(Auth::user())->send(new SalesCompleted($salesHeader));  
+        // Mail::to(Auth::user())->send(new SalesCompleted($salesHeader));  
         
-        return view('theme.paynamics.sender', compact('base64Code'));
-       
+        // return view('theme.paynamics.sender', compact('base64Code'));
+       return redirect(route('cart.front.show'))->with('cart_success','Order has been placed.');
     }
 
     public function receive_data_from_payment_gateway(Request $request)
