@@ -372,9 +372,9 @@
                         @enderror
                     </div>
                     <div class="form-group">
-                        <label class="d-block">Display @if (\App\Article::has_featured_limit()) (Max Featured: {{ \App\Article::has_featured_limit() }}) @endif</label>
+                        <label class="d-block">Display @if (Article::has_featured_limit()) (Max Featured: {{ Article::has_featured_limit() }}) @endif</label>
                         <div class="custom-control custom-switch @error('is_featured') is-invalid @enderror">
-                            <input type="checkbox" class="custom-control-input" name="is_featured" {{ (old("is_featured") ? "checked":"") }} id="customSwitch2" @if (\App\Article::cannot_create_featured_news()) disabled @endif >
+                            <input type="checkbox" class="custom-control-input" name="is_featured" {{ (old("is_featured") ? "checked":"") }} id="customSwitch2" @if (Article::cannot_create_featured_news()) disabled @endif >
                             <label class="custom-control-label" for="customSwitch2">Featured</label>
                         </div>
                         @error(['inputName' => 'is_featured'])
