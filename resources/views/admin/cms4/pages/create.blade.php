@@ -79,10 +79,10 @@
                         <label class="d-block">Page Banner</label>
                         <div class="btn-group" role="group" aria-label="Basic example">
                             <button type="button" id="banner_slider" class="btn page_banner_btn btn-secondary
-							@if(old('banner_type') != 'banner_image') active @endif">Slider
+                            @if(old('banner_type') != 'banner_image') active @endif">Slider
                             </button>
                             <button type="button" id="banner_image" class="btn page_banner_btn btn-secondary
-							@if(old('banner_type') == 'banner_image') active @endif">Image
+                            @if(old('banner_type') == 'banner_image') active @endif">Image
                             </button>
                             <input type="hidden" name="banner_type" id="banner_type" value="{{ old('banner_type','banner_slider') }}">
                         </div>
@@ -116,9 +116,9 @@
                                     @endforelse
                                 </select>
                             </div>
-                            {{--						<div class="col-md-2" id="preview_btn_div" style="display:none;">--}}
-                            {{--							<a href="#" data-toggle="modal" data-target="#preview-banner" id="preview_btn" class="btn btn-xs btn-success">Preview</a>--}}
-                            {{--						</div>--}}
+                            {{--                        <div class="col-md-2" id="preview_btn_div" style="display:none;">--}}
+                            {{--                            <a href="#" data-toggle="modal" data-target="#preview-banner" id="preview_btn" class="btn btn-xs btn-success">Preview</a>--}}
+                            {{--                        </div>--}}
                         </div>
 
                         @error(['inputName' => 'album_id'])
@@ -333,21 +333,23 @@
                                     <div class="grid grid--align-center">
                                         <div class="grid-item">
                                             <div class="input-group-container">
+                                                <div class="position-relative d-none">
+                                                    <input class="input-group__input--select input-box" type="text" placeholder="Search block" />
+                                                </div>
                                                 <div class="position-relative">
                                                     <select id="block-select" class="input-group__input--select input-box">
                                                         <option value="1" selected>Basic Blocks</option>
                                                         <option value="2">Built-in Blocks</option>
-                                                        <!-- <option value="4">Bootstrap v4</option> -->
-                                                        <!-- <option value="3">Custom blocks</option> -->
                                                     </select>
                                                     <i class="select-group__icon is-abs--r is-no-pointer icon fa fa-null"></i>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="grid-item grid-item--behavior-fixed ml-2">
+                                        <div class="grid-item grid-item--behavior-fixed ml-2 d-none">
                                             <button type="button" class="btn btn-block btn-hinfo btn-sm px-2" id="mobile-view">
                                             <span class="btn-wrapper--icon">
                                                 <i class="lnr lnr-magnifier"></i>
+                                                <i class="lnr lnr-cross2"></i>
                                             </span>
                                             </button>
                                         </div>
@@ -360,6 +362,7 @@
                             </div>
                         </div>
 
+                        <input type="hidden" name="json" id="json" value="">
                         <input type="hidden" name="contents" id="contents" value="">
                         <input type="hidden" name="styles" id="styles" value="">
 
@@ -441,49 +444,96 @@
 @endsection
 
 @section('pagejs')
+    <script>
+        // jQuery Typing
+        (function(f){function l(g,h){function d(a){if(!e){e=true;c.start&&c.start(a,b)}}function i(a,j){if(e){clearTimeout(k);k=setTimeout(function(){e=false;c.stop&&c.stop(a,b)},j>=0?j:c.delay)}}var c=f.extend({start:null,stop:null,delay:400},h),b=f(g),e=false,k;b.keypress(d);b.keydown(function(a){if(a.keyCode===8||a.keyCode===46)d(a)});b.keyup(i);b.blur(function(a){i(a,0)})}f.fn.typing=function(g){return this.each(function(h,d){l(d,g)})}})(jQuery);
+        $(document).ready( function($){
+            $('#icons-filter').typing({
+                stop: function (event, $elem) {
+                    var filterValue = $elem.val(),
+                        count = 0;
+                    if( $elem.val() ) {
+                        $(".icons-list li").each(function(){
+                            if ($(this).text().search(new RegExp(filterValue, "i")) < 0) {
+                                $(this).fadeOut();
+                            } else {
+                                $(this).show();
+                                count++
+                            }
+                        });
+                    } else {
+                        $(".icons-list li").show();
+                    }
+                    count = 0;
+                },
+                delay: 500
+            });
+        });
+    </script>
+    <script>
+        let jsComponents = "";
+        let jsStyles = "";
+    </script>
     <script src="{{ asset('lib/custom-grapesjs/assets/js/popper.min.js') }}"></script>
     <script src="{{ asset('lib/bselect/dist/js/bootstrap-select.js') }}"></script>
     <script src="{{ asset('lib/bselect/dist/js/i18n/defaults-en_US.js') }}"></script>
     <script src="{{ asset('lib/owl.carousel/owl.carousel.js') }}"></script>
     <script src="{{ asset('js/file-upload-validation.js') }}"></script>
     <script src="{{ asset('vendor/laravel-filemanager/js/stand-alone-button-2.js') }}"></script>
-
-    {{-- <script src="{{ asset('lib/grapesjs/toastr.min.js') }}"></script> --}}
     <script src="{{ asset('lib/custom-grapesjs/grapesjs/dist/grapes.min.js') }}"></script>
     <script src="{{ asset('lib/custom-grapesjs/grapesjs-blocks-basic/dist/grapesjs-blocks-basic.min.js') }}"></script>
     <script src="{{ asset('lib/custom-grapesjs/grapesjs-plugins/grapesjs-pkurg-bootstrap4-plugin.js') }}"></script>
     <script src="{{ asset('lib/custom-grapesjs/grapesjs-plugins/grapesjs-lory-slider.min.js') }}"></script>
-    <script src="{{ asset('lib/custom-grapesjs/grapesjs-plugins/grapesjs-custom-code.min.js') }}"></script>
     <script src="{{ asset('lib/custom-grapesjs/grapesjs-plugins/grapesjs-touch.min.js') }}"></script>
     <script src="{{ asset('lib/custom-grapesjs/grapesjs-plugins/grapesjs-parser-postcss.min.js') }}"></script>
     <script src="{{ asset('lib/custom-grapesjs/grapesjs-plugins/grapesjs-tooltip.min.js') }}"></script>
     <script src="{{ asset('lib/custom-grapesjs/grapesjs-plugins/grapesjs-tui-image-editor.min.js') }}"></script>
     <script src="{{ asset('lib/custom-grapesjs/grapesjs-plugins/grapesjs-typed.min.js') }}"></script>
     <script src="{{ asset('lib/custom-grapesjs/grapesjs-plugins/grapesjs-style-bg.min.js') }}"></script>
-    {{-- <script src="{{ asset('lib/grapesjs/fabric.min.js') }}"></script> --}}
     <script src="{{ asset('lib/custom-grapesjs/grapesjs-plugins/tui-code-snippet.min.js') }}"></script>
     <script src="{{ asset('lib/custom-grapesjs/grapesjs-plugins/tui-color-picker.min.js') }}"></script>
-    {{-- <script src="{{ asset('lib/grapesjs/tui-image-editor.min.js') }}"></script> --}}
-    {{-- <script src="{{ asset('lib/grapesjs/grapesjs-style-gradient.min.js') }}"></script> --}}
     <script src="{{ asset('lib/custom-grapesjs/grapesjs-plugins/grapesjs-plugin-ckeditor.min.js') }}"></script>
     <script src="{{ asset('lib/custom-grapesjs/grapesjs-plugins/grapesjs-plugin-export.min.js') }}"></script>
     <script src="{{ asset('lib/custom-grapesjs/grapesjs-plugins/grapesjs-blocks-bootstrap4.min.js') }}"></script>
     <script src="{{ asset('lib/custom-grapesjs/grapesjs-plugins/b4bulder-custom-blocks.js') }}"></script>
-    <script src="{{ asset('lib/custom-grapesjs/ckeditor/ckeditor.js') }}"></script>
+    <script src="{{ asset('lib/custom-grapesjs/grapesjs-plugins/grapesjs-preset-webpage.min.js') }}"></script>
     <script src="{{ asset('lib/custom-grapesjs/grapesjs-plugins/grapesjs-plugin-animation.js') }}"></script>
+    <script src="{{ asset('lib/custom-grapesjs/ckeditor/ckeditor.js') }}"></script>
     <script src="{{ asset('lib/custom-grapesjs/assets/js/custom-grapesjs.js') }}"></script>
     <script src="{{ asset('lib/custom-grapesjs/assets/js/bamburgh.min.js') }}"></script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.0/typed.min.js"></script>
 @endsection
-
-
 @section('customjs')
     <script>
-
+        // jQuery Typing
+        (function(f){function l(g,h){function d(a){if(!e){e=true;c.start&&c.start(a,b)}}function i(a,j){if(e){clearTimeout(k);k=setTimeout(function(){e=false;c.stop&&c.stop(a,b)},j>=0?j:c.delay)}}var c=f.extend({start:null,stop:null,delay:400},h),b=f(g),e=false,k;b.keypress(d);b.keydown(function(a){if(a.keyCode===8||a.keyCode===46)d(a)});b.keyup(i);b.blur(function(a){i(a,0)})}f.fn.typing=function(g){return this.each(function(h,d){l(d,g)})}})(jQuery);
+        jQuery(document).ready( function($){
+            $('#icons-filter').typing({
+                stop: function (event, $elem) {
+                    var filterValue = $elem.val(),
+                        count = 0;
+                    if( $elem.val() ) {
+                        $(".icons-list li").each(function(){
+                            if ($(this).text().search(new RegExp(filterValue, "i")) < 0) {
+                                $(this).fadeOut();
+                            } else {
+                                $(this).show();
+                                count++
+                            }
+                        });
+                    } else {
+                        $(".icons-list li").show();
+                    }
+                    count = 0;
+                },
+                delay: 500
+            });
+        });
+    </script>
+    <script>
         $(function() {
             $('.selectpicker').selectpicker();
         });
-
         /**  START Slider Preview **/
         $('#album_id').on('change', function() {
             $("#preview_btn").data("id", $('#album_id').val());
@@ -493,7 +543,6 @@
                 $('#preview_btn_div').hide();
             }
         });
-
         $('#preview-banner').on('show.bs.modal', function (e) {
             let album = e.relatedTarget;
             let albumId = $(album).data('id');
@@ -511,9 +560,7 @@
                         </div>`;
                     });
                     $('#previewCarousel').trigger('destroy.owl.carousel');
-
                     $('#previewCarousel').html(pathHTML);
-
                     $('#previewCarousel').owlCarousel({
                         animateOut: returnData['transition_out'],
                         animateIn: returnData['transition_in'],
@@ -540,7 +587,6 @@
             });
         });
         /**  END Slider Preview **/
-
         $("#customSwitch1").change(function() {
             if(this.checked) {
                 $('#label_visibility').html('Published');
@@ -549,8 +595,6 @@
                 $('#label_visibility').html('Private');
             }
         });
-
-
         /** Generation of the page slug **/
         function get_page_slug() {
             var url = $('#name').val();
@@ -560,118 +604,82 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr("content")
                 }
             })
-
             $.ajax({
                 type: "POST",
                 url: "{{ route('pages.get_slug') }}",
                 data: {url: url, parentPage: parentPage}
             })
-
                 .done(function (response) {
-
                     slug_url = '{{env('APP_URL')}}/' + response;
                     $('#page_slug').html("<a target='_blank' href='" + slug_url + "'>" + slug_url + "</a>");
-
                 });
         }
-
-
         $('#parentPage').change(function(){
             get_page_slug();
         });
-
         $('#name').change(function(){
             get_page_slug();
         });
-
-
         /** Handles the page banner functions **/
         $('.page_banner_btn').click(function(){
-
             var btn = $(this).attr('id');
-
             if(btn == $('#banner_type').val()){ // if user clicked the already selected button then cancel the operation.
                 return false;
             }
             else{
-
                 /** reset the input boxes **/
                 $('#image_url').val('');
                 $('#img_name').html('Choose file');
                 $('#album_id').val('');
                 $('#image_div').hide();
-
-
                 $('#banner_type').val(btn);
-
-
                 $('#image_url').val();
                 if(btn == 'banner_slider'){ // if user selected the banner slider
-
                     $("#banner_image").removeClass("active");
                     $("#banner_slider").addClass("active");
-
                     // $("#album_id").prop('required',true);
                     // $("#image_url").prop('required',false);
-
                     $(".banner-image").hide();
                     $(".banner-slider").show();
                 }
-
-
                 if(btn == 'banner_image'){ // if user selected the banner image
-
                     $("#banner_slider").removeClass("active");
                     $("#banner_image").addClass("active");
-
                     // $("#image_url").prop('required',true);
                     // $("#album_id").prop('required',false);
-
                     $(".banner-slider").hide();
                     $(".banner-image").show();
-
                 }
             }
-
-
         });
-
     </script>
     <script>
         function readURL(file) {
             let reader = new FileReader();
-
             reader.onload = function(e) {
                 $('#img_name').html(file.name);
                 $('#image_url').attr('title', file.name);
                 $('#img_temp').attr('src', e.target.result);
             }
-
             reader.readAsDataURL(file);
             $('#image_div').show();
         }
-
         $("#image_url").change(function(evt) {
-
             $('#img_name').html('Choose file');
             $('#img_temp').attr('src', '');
             $('#image_div').hide();
-
             let files = evt.target.files;
             let maxSize = 1;
             let validateFileTypes = ["image/jpeg", "image/png"];
             let requiredWidth = "{{ env('SUB_BANNER_WIDTH') }}";
             let requiredHeight =  "{{ env('SUB_BANNER_HEIGHT') }}";
-
             validate_files(files, readURL, maxSize, validateFileTypes, requiredWidth, requiredHeight, remove_banner_value_when_error);
         });
-
         function remove_banner_value_when_error()
         {
             $('#image_url').val('');
             $('#image_url').removeAttr('title');
         }
-
         function remove_image() {
             $('#img_name').html('Choose file');
             $('#image_url').removeAttr('title');
