@@ -83,7 +83,7 @@ Route::get('/request-demo/{id}',[FrontController::class, 'request_for_demo'])->n
 
 
 // CMS4 Front Pages
-    Route::get('/home', [FrontController::class, 'home'])->name('home');
+    Route::get('/', [FrontController::class, 'home'])->name('home');
     Route::get('/privacy-policy/', [FrontController::class, 'privacy_policy'])->name('privacy-policy');
     Route::post('/contact-us', [FrontController::class, 'contact_us'])->name('contact-us');
 
@@ -117,10 +117,10 @@ Route::get('/request-demo/{id}',[FrontController::class, 'request_for_demo'])->n
     Route::post('/forgot-password', 'EcommerceControllers\EcommerceFrontController@sendResetLinkEmail')->name('ecommerce.send_reset_link_email');
     Route::get('/reset-password/{token}', 'EcommerceControllers\EcommerceFrontController@showResetForm')->name('ecommerce.reset_password');
     Route::post('/reset-password', 'EcommerceControllers\EcommerceFrontController@reset')->name('ecommerce.reset_password_post');
-    
+
 
     Route::get('/shop', [ShopController::class, 'index'])->name('shop');
-    
+
 
     Route::get('/products/{slug}', [ProductFrontController::class, 'show'])->name('product.front.show');
 
@@ -128,7 +128,7 @@ Route::get('/request-demo/{id}',[FrontController::class, 'request_for_demo'])->n
 
 
 
-    
+
 
 
     // Cart
@@ -141,7 +141,7 @@ Route::get('/request-demo/{id}',[FrontController::class, 'request_for_demo'])->n
         Route::post('cart/deduct-qty','EcommerceControllers\CartController@deduct_qty')->name('cart.deduct');
 
         Route::post('cart/proceed-checkout','EcommerceControllers\CartController@proceed_checkout')->name('cart.front.proceed_checkout');
-        
+
     //
 //
 
