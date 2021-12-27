@@ -52,14 +52,14 @@
                         <label class="d-block">Title *</label>
                         <input type="text" class="form-control @error('name') is-invalid @enderror" maxlength="150" name="name" id="name" value="{{ old('name',$news->name) }}" required>
                         <small id="news_slug">{{ $news->get_url() }}</small>
-                        @hasError(['inputName' => 'name'])
-                        @endhasError
+                        @error(['inputName' => 'name'])
+                        @enderror
                     </div>
                     <div class="form-group">
                         <label class="d-block">Date *</label>
                         <input type="date" class="form-control @error('date') is-invalid @enderror" name="date" id="date" value="{{ old('date',$news->date) }}">
-                        @hasError(['inputName' => 'date'])
-                        @endhasError
+                        @error(['inputName' => 'date'])
+                        @enderror
                     </div>
                     <div class="form-group">
                         <label class="d-block">Category</label>
@@ -70,8 +70,8 @@
                             @empty
                             @endforelse
                         </select>
-                        @hasError(['inputName' => 'category_id'])
-                        @endhasError
+                        @error(['inputName' => 'category_id'])
+                        @enderror
                     </div>
                     <div class="form-group">
                         <label class="d-block">Article banner</label>
@@ -82,8 +82,8 @@
                         <p class="tx-10">
                             Required image dimension: {{ env('NEWS_BANNER_WIDTH') }}px by {{ env('NEWS_BANNER_HEIGHT') }}px <br /> Maximum file size: 1MB <br /> Required file type: .jpeg .png
                         </p>
-                        @hasError(['inputName' => 'news_image'])
-                        @endhasError
+                        @error(['inputName' => 'news_image'])
+                        @enderror
                         <div id="image_div" @if(empty($news->image_url)) style="display:none;" @endif>
                             <img src="{{ $news->image_url }}" height="300" width="180" id="img_temp" alt="">  <br /><br />
                             <a href="javascript:void(0)" class="btn btn-sm btn-danger" onclick="remove_image()">Remove Image</a>
@@ -95,8 +95,8 @@
                             <input type="file" class="custom-file-input @error('news_thumbnail') is-invalid @enderror" name="news_thumbnail" id="news_thumbnail" @if (!empty($news->thumbnail_url)) title="{{$news->get_image_file_name()}}" @endif>
                             <label class="custom-file-label" for="news_thumbnail" id="img_name_thumbnail">@if (empty($news->thumbnail_url)) Choose file @else {{$news->get_image_file_name()}} @endif</label>
                         </div>
-                        @hasError(['inputName' => 'news_thumbnail'])
-                        @endhasError
+                        @error(['inputName' => 'news_thumbnail'])
+                        @enderror
                         @if (env('NEWS_THUMBNAIL_WIDTH') && env('NEWS_THUMBNAIL_HEIGHT'))
                             <p class="tx-10">
                                 Required image dimension: {{ env('NEWS_THUMBNAIL_WIDTH') }}px by {{ env('NEWS_THUMBNAIL_HEIGHT') }}px <br /> Maximum file size: 1MB <br /> Required file type: .jpeg .png
@@ -349,8 +349,8 @@
                         <input type="hidden" name="contents" id="contents" value="{{ old('contents', $news->contents) }}">
                         <input type="hidden" name="styles" id="styles" value="{{ str_replace(array("'", "&#039;"), "", old('styles', $news->styles) ) }}">
 
-                        @hasError(['inputName' => 'contents'])
-                        @endhasError
+                        @error(['inputName' => 'contents'])
+                        @enderror
                         <span class="invalid-feedback" role="alert" id="contentsRequired" style="display: none;">
                         <strong>The content field is required</strong>
                     </span>
@@ -399,22 +399,22 @@
                     <div class="form-group">
                         <label class="d-block">Title <code>(meta title)</code></label>
                         <input type="text" class="form-control @error('meta_title') is-invalid @enderror" name="meta_title" value="{{ old('meta_title',$news->meta_title) }}">
-                        @hasError(['inputName' => 'meta_title'])
-                        @endhasError
+                        @error(['inputName' => 'meta_title'])
+                        @enderror
                         <p class="tx-11 mg-t-4">{{ __('standard.seo.title') }}</p>
                     </div>
                     <div class="form-group">
                         <label class="d-block">Description <code>(meta description)</code></label>
                         <textarea rows="3" class="form-control @error('meta_description') is-invalid @enderror" name="meta_description">{{ old('meta_description',$news->meta_description) }}</textarea>
-                        @hasError(['inputName' => 'meta_description'])
-                        @endhasError
+                        @error(['inputName' => 'meta_description'])
+                        @enderror
                         <p class="tx-11 mg-t-4">{{ __('standard.seo.description') }}</p>
                     </div>
                     <div class="form-group">
                         <label class="d-block">Keywords <code>(meta keywords)</code></label>
                         <textarea rows="3" class="form-control @error('meta_keyword') is-invalid @enderror" name="meta_keyword">{{ old('meta_keyword',$news->meta_keyword) }}</textarea>
-                        @hasError(['inputName' => 'meta_keyword'])
-                        @endhasError
+                        @error(['inputName' => 'meta_keyword'])
+                        @enderror
                         <p class="tx-11 mg-t-4">{{ __('standard.seo.keywords') }}</p>
                     </div>
                 </div>
