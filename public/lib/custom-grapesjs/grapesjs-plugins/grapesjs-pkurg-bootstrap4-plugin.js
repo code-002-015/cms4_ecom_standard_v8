@@ -3025,6 +3025,67 @@ editor.BlockManager.add("b4-block-col6", {
     attributes: { class: "fa fa-columns" },
 });
 
+editor.TraitManager.addType("align-items", {
+    // Return a simple HTML string or an HTML element
+    createInput({ trait }) {
+        // Here we can decide to use properties from the trait
+        const traitOpts = trait.get("options") || [];
+        const options = traitOpts.lenght
+            ? traitOpts
+            : [
+                  { id: "", name: "None" },
+                  { id: "align-items-start", name: "Start" },
+                  { id: "align-items-end", name: "End" },
+                  { id: "align-items-center", name: "Center" },
+                  { id: "align-items-baseline", name: "Baseline" },
+                  { id: "align-items-stretch", name: "Stretch" },
+              ];
+
+        // Create a new element container add some content
+        const el = document.createElement("div");
+        el.innerHTML = `
+      <select class="align-items__type">
+        ${options
+            .map((opt) => `<option value="${opt.id}">${opt.name}</option>`)
+            .join("")}
+      </select>
+      <div class="gjs-sel-arrow">
+        <div class="gjs-d-s-arrow"></div>
+      </div>     
+    `;
+
+        return el;
+    },
+
+    // Update the component based element changes
+    onEvent({ elInput, component }) {
+        const inputType = elInput.querySelector(".align-items__type");
+        const inputVal = inputType.value;
+
+        if (inputVal !== "") {
+            component.addAttributes({ "data-align-items": inputVal });
+            component.addClass(inputVal);
+            if (component._previousAttributes.attributes["data-align-items"]) {
+                component.removeClass(
+                    component._previousAttributes.attributes["data-align-items"]
+                );
+            }
+        } else {
+            component.removeClass(
+                component.getAttributes()["data-align-items"]
+            );
+            component.removeAttributes("data-align-items");
+        }
+    },
+
+    onUpdate({ elInput, component }) {
+        const alignItems = component.getAttributes()["data-align-items"] || "";
+        const inputType = elInput.querySelector(".align-items__type");
+
+        inputType.value = alignItems;
+    },
+});
+
 // editor.BlockManager.add('b4-block-row', {
 //   label: 'Row',
 //   content: `<div class="row" ></div>
@@ -3079,12 +3140,12 @@ editor.BlockManager.add("b4-block-col6", {
 //     category: "Layout",
 // });
 
-editor.BlockManager.add('b4-block-section', {
-  label: 'Section',
-  content: `<section></section>
-  <style> section {min-height: 40px;}</style>`,
-  category: 'Layout',
-  attributes: { class: 'fa fa-puzzle-piece' },
+editor.BlockManager.add("b4-block-section", {
+    label: "Section",
+    content: `<section style="padding:100px 0"></section>
+  <style> section:empty {min-height: 40px;}</style>`,
+    category: "Layout",
+    attributes: { class: "fa fa-puzzle-piece" },
 });
 
 
@@ -3896,13 +3957,7 @@ editor.Commands.add('table-insert-row-above', editor => {
 
 editor.BlockManager.add("parallax", {
     label: "Parallax Background",
-    content: `<div data-gjs-type="parallax" class="parallax gpd-parallax gjs-selected" data-bottom-top="background-position:0px 300px;" data-top-bottom="background-position:0px -300px;"></div>
-    <style>
-    .gpd-parallax:empty {
-        min-height: 500px;
-    }
-    </style>
-    `,
+    content: `<div data-gjs-type="parallax" class="parallax gjs-selected" data-bottom-top="background-position:0px 300px;" data-top-bottom="background-position:0px -300px;"></div>`,
     category: "Background",
     attributes: { class: "gjs-fonts gjs-f-image" },
 });
