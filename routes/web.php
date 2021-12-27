@@ -86,7 +86,7 @@ Route::get('/request-demo/{id}',[FrontController::class, 'request_for_demo'])->n
 
 
 // CMS4 Front Pages
-//    Route::get('/', [FrontController::class, 'home'])->name('home');
+    Route::get('/', [FrontController::class, 'home'])->name('home');
     Route::get('/privacy-policy/', [FrontController::class, 'privacy_policy'])->name('privacy-policy');
     Route::post('/contact-us', [FrontController::class, 'contact_us'])->name('contact-us');
 
