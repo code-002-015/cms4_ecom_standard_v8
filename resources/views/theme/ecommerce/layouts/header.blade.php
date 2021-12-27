@@ -6,7 +6,7 @@
 				<!-- Logo
 				============================================= -->
 				<div id="logo" class="me-lg-4">
-					<a href="demo-shop.html" class="standard-logo"> <img src="{{ asset('storage').'/logos/'.Setting::getFaviconLogo()->company_logo }}" alt="{{''.env('COMPANY_NAME')}}"></a>
+					<a href="/" class="standard-logo"> <img src="{{ asset('storage').'/logos/'.Setting::getFaviconLogo()->company_logo }}" alt="{{''.env('COMPANY_NAME')}}"></a>
 					<a href="demo-shop.html" class="retina-logo"><img src="{{ asset('theme/'.env('THEME_FOLDER').'/images/logo@2x.png') }}" alt="Canvas Logo"></a>
 				</div><!-- #logo end -->
 
