@@ -29,7 +29,7 @@
 
 	<!-- Document Title
 	============================================= -->
-	<title>Shop Demo | Canvas</title>
+	<title>Ecommerce Demo | Webfocus</title>
 
 
 	@yield('pagecss')
