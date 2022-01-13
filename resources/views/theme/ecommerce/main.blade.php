@@ -26,6 +26,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 
 	<link rel="stylesheet" href="{{ asset('theme/ecommerce/css/colors.php?color=000000') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('theme/cms4/plugins/fontawesome/css/all.min.css') }}" />
 
 	<!-- Document Title
 	============================================= -->

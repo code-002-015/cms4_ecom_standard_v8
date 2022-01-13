@@ -48,13 +48,13 @@ use App\Http\Controllers\EcommerceControllers\ReportsController;
 use App\Http\Controllers\EcommerceControllers\SalesController;
 use App\Http\Controllers\EcommerceControllers\CartController;
 use App\Http\Controllers\EcommerceControllers\ShopController;
-
+use App\Http\Controllers\EcommerceControllers\MyAccountController;
 
 use App\Http\Controllers\EcommerceControllers\CouponController;
 
 
 use App\Http\Controllers\EcommerceControllers\CustomerFrontController;
-
+use App\Http\Controllers\EcommerceControllers\SalesFrontController;
 
 /*
 |--------------------------------------------------------------------------
@@ -153,7 +153,25 @@ Route::get('/request-demo/{id}',[FrontController::class, 'request_for_demo'])->n
 // CUSTOMER ROUTES
 Route::group(['middleware' => ['authenticated']], function () {
     Route::get('/checkout', [CartController::class, 'checkout'])->name('cart.front.checkout');
+//    Route::post('/temp_save',[CartController::class, 'save_sales'])->name('cart.temp_sales');
+//    Route::post('product/review/store', [ProductReviewController::class, 'store'])->name('product.review.store');
+//    Route::get('/checkout', 'EcommerceControllers\CheckoutController@checkout')->name('cart.front.checkout');
     Route::post('/temp_save',[CartController::class, 'save_sales'])->name('cart.temp_sales');
+    Route::get('/account/sales', [SalesFrontController::class, 'sales_list'])->name('profile.sales');
+    Route::post('/account/product-reorder',[SalesFrontController::class, 'reorder'])->name('profile.sales-reorder-product');
+    Route::post('/account/reorder', [SalesFrontController::class, 'reorder'])->name('my-account.reorder');
+    Route::post('/account/cancel/order', [SalesFrontController::class, 'cancel_order'])->name('my-account.cancel-order');
+    Route::get('/account/manage', [MyAccountController::class, 'manage_account'])->name('my-account.manage-account');
+    Route::post('/account/manage', [MyAccountController::class, 'update_personal_info'])->name('my-account.update-personal-info');
+    Route::post('/account/manage/update-contact', [MyAccountController::class, 'update_contact_info'])->name('my-account.update-contact-info');
+    Route::post('/account/manage/update-address', [MyAccountController::class, 'update_address_info'])->name('my-account.update-address-info');
+
+    Route::get('/account/change-password', [MyAccountController::class, 'change_password'])->name('my-account.change-password');
+
+    Route::post('/account/change-password', [MyAccountController::class, 'update_password'])->name('my-account.update-password');
+
+    Route::get('/account/pay/{id}', [CartController::class, 'pay_again'])->name('my-account.pay-again');
+
 });
 
 

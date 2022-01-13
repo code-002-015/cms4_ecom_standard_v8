@@ -16,7 +16,7 @@
 					============================================= -->
 					<div id="top-account">
 						@if(auth()->check())
-							<a href="{{ route('customer-front.login') }}"><i class="icon-line2-user me-1 position-relative" style="top: 1px;"></i><span class="d-none d-sm-inline-block font-primary fw-medium">{{ auth()->user()->fullname }}</span></a>
+							<a href="{{ route('my-account.manage-account') }}"><i class="icon-line2-user me-1 position-relative" style="top: 1px;"></i><span class="d-none d-sm-inline-block font-primary fw-medium">{{ auth()->user()->fullname }}</span></a>
 						@else
 							<a href="{{ route('customer-front.login') }}"><i class="icon-line2-user me-1 position-relative" style="top: 1px;"></i><span class="d-none d-sm-inline-block font-primary fw-medium">Login</span></a>
 						@endif

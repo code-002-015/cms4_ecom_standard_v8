@@ -3,16 +3,10 @@
   <component name="ChangeListManager">
     <list default="true" id="0b537cd8-c930-4f0b-af89-6336189cfea8" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/lib/custom-grapesjs/assets/css/custom-grapesjs.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/lib/custom-grapesjs/assets/css/custom-grapesjs.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/lib/custom-grapesjs/assets/js/custom-grapesjs.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/lib/custom-grapesjs/assets/js/custom-grapesjs.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/lib/custom-grapesjs/assets/js/img/featured/1.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/public/lib/custom-grapesjs/assets/js/img/featured/1.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/lib/custom-grapesjs/assets/js/img/featured/2.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/public/lib/custom-grapesjs/assets/js/img/featured/2.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/lib/custom-grapesjs/assets/js/json/about.json" beforeDir="false" afterPath="$PROJECT_DIR$/public/lib/custom-grapesjs/assets/js/json/about.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/lib/custom-grapesjs/assets/js/json/featured.json" beforeDir="false" afterPath="$PROJECT_DIR$/public/lib/custom-grapesjs/assets/js/json/featured.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/lib/custom-grapesjs/grapesjs-blocks-basic/dist/grapesjs-blocks-basic.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/lib/custom-grapesjs/grapesjs-blocks-basic/dist/grapesjs-blocks-basic.min.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/lib/custom-grapesjs/grapesjs-plugins/grapesjs-blocks-bootstrap4.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/lib/custom-grapesjs/grapesjs-plugins/grapesjs-blocks-bootstrap4.min.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/lib/custom-grapesjs/grapesjs-plugins/grapesjs-pkurg-bootstrap4-plugin.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/lib/custom-grapesjs/grapesjs-plugins/grapesjs-pkurg-bootstrap4-plugin.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/lib/custom-grapesjs/grapesjs-plugins/grapesjs-plugin-animation.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/lib/custom-grapesjs/grapesjs-plugins/grapesjs-plugin-animation.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/EcommerceControllers/MyAccountController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/EcommerceControllers/MyAccountController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/theme/ecommerce/layouts/header.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/theme/ecommerce/layouts/header.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/theme/ecommerce/main.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/theme/ecommerce/main.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -176,10 +170,21 @@
       <workItem from="1640134884898" duration="573000" />
       <workItem from="1640135484918" duration="3130000" />
       <workItem from="1640219686748" duration="24737000" />
+      <workItem from="1642056508659" duration="5938000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="604" y="336" key="NewPhpFileDialog" timestamp="1642060222245">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="604" y="336" key="NewPhpFileDialog/0.0.1536.824@0.0.1536.824" timestamp="1642060222245" />
+    <state x="425" y="187" key="run.anything.popup" timestamp="1642059966076">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="425" y="187" key="run.anything.popup/0.0.1536.824@0.0.1536.824" timestamp="1642059966076" />
   </component>
 </project>
