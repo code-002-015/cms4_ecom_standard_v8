@@ -267,8 +267,38 @@ return [
 
 
 
-        //Laravel File-manager
+        // Laravel File-manager
         'Image' => Intervention\Image\Facades\Image::class,
+
+
+        // Ecommerce Controllers
+        'CouponFrontController' => App\Http\Controllers\EcommerceControllers\CouponFrontController::class,
+        'CouponController' => App\Http\Controllers\EcommerceControllers\CouponController::class,
+        'ProductFrontController' => App\Http\Controllers\EcommerceControllers\ProductFrontController::class,
+        'ProductCategoryController' => App\Http\Controllers\EcommerceControllers\ProductCategoryController::class,
+        'ProductController' => App\Http\Controllers\EcommerceControllers\ProductController::class,
+        'InventoryReceiverHeaderController' => App\Http\Controllers\EcommerceControllers\InventoryReceiverHeaderController::class,
+        'DeliverablecitiesController' => App\Http\Controllers\EcommerceControllers\DeliverablecitiesController::class,
+        'PromoController' => App\Http\Controllers\EcommerceControllers\PromoController::class,
+        'FavoriteController' => App\Http\Controllers\EcommerceControllers\FavoriteController::class,
+        'WishlistController' => App\Http\Controllers\EcommerceControllers\WishlistController::class,
+        'CheckoutController' => App\Http\Controllers\EcommerceControllers\CheckoutController::class,
+        'ReportsController' => App\Http\Controllers\EcommerceControllers\ReportsController::class,
+        'SalesController' => App\Http\Controllers\EcommerceControllers\SalesController::class,
+        'CartController' => App\Http\Controllers\EcommerceControllers\CartController::class,
+        'ShopController' => App\Http\Controllers\EcommerceControllers\ShopController::class,
+
+        
+        
+        
+        
+        
+        
+        
+        
+        
+
+        
 
 
 

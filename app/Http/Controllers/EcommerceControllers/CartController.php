@@ -211,9 +211,10 @@ class CartController extends Controller
         ]);
     }
 
-    public function checkout()
+    public function proceed_checkout(Request $request)
     {
-        if(auth()->check()){            
+        if(auth()->check()){   
+                  
             if (Cart::where('user_id', auth()->id())->count() == 0) {
                 return redirect()->route('product.front.list');
             }
@@ -223,18 +224,66 @@ class CartController extends Controller
             }
 
 
-            $page = new Page();
-            $page->name = 'Checkout';
+            $data   = $request->all();
+            $cartId = $data['cart_id'];
+            $qty    = $data['quantity'];
+            $price  = $data['product_price'];
 
-            $orders = Cart::where('user_id',Auth::id())->get();      
-            $locations = Deliverablecities::where('status','PUBLISHED')->orderBy('name')->get();
+            foreach($cartId as $key => $cart){
+                Cart::find($cart)->update([
+                    'qty' => $qty[$key],
+                    'price' => $price[$key]
+                ]);
+            }
 
-            return view('theme.ecommerce.pages.checkout', compact('orders','locations','page'));
 
+            if($request->coupon_counter > 0){
+                $data     = $request->all();
+                $coupons  = $data['couponid'];
+                $product  = $data['coupon_productid'];
+                $usage    = $data['couponUsage'];
+                $discount = $data['discount'];
+
+                foreach($coupons as $key => $c){
+                    $coupon = Coupon::find($c);
+
+                    if($coupon->status == 'ACTIVE'){
+                        CouponCart::create([
+                            'coupon_id' => $coupon->id,
+                            'product_id' => $product[$key] == 0 ? 0 : $product[$key],
+                            'customer_id' => Auth::id(),
+                            'total_usage' => $usage[$key],
+                            'discount' => $discount[$key]
+                        ]);
+                    }
+                }
+            }
+
+            CouponCartDiscount::create([
+                'customer_id' => Auth::id(),
+                'coupon_discount' => $request->coupon_total_discount
+            ]);
+
+            return redirect()->route('cart.front.checkout');
         } else {
             return redirect()->route('customer-front.login');
         }
     }
+
+    public function checkout()
+    {
+        $page = new Page();
+        $page->name = 'Checkout';
+
+        $orders = Cart::where('user_id',Auth::id())->get();      
+        $locations = Deliverablecities::where('status','PUBLISHED')->orderBy('name')->get();
+        $cart = CouponCartDiscount::where('customer_id',Auth::id())->first();
+
+        $coupons = CouponCart::where('customer_id', Auth::id())->get();
+
+        return view('theme.ecommerce.pages.checkout', compact('orders','locations', 'cart', 'coupons', 'page'));
+    }
+
 
     public function pay_again($id){
         $r = SalesHeader::findOrFail($id);
@@ -242,8 +291,10 @@ class CartController extends Controller
         $sales = 
         $urls = [
             'notification' => route('cart.payment-notification'),
-            'result' => route('profile.sales'),
-            'cancel' => route('profile.sales'),
+            // 'result' => route('profile.sales'),
+            // 'cancel' => route('profile.sales'),
+            'result' => route('cart.front.show'),
+            'cancel' => route('cart.front.show'),
         ];
        
         $base64Code = PaynamicsHelper::payNow($r->order_number, Auth::user(), $r->items, number_format($r->net_amount, 2, '.', ''), $urls, false ,number_format($r->delivery_fee_amount, 2, '.', ''), $r->discount_amount);
@@ -271,16 +322,15 @@ class CartController extends Controller
     public function save_sales(Request $request) 
     { 
         $total_cart_items = Cart::where('user_id',Auth::id())->count();
-        if($total_cart_items == 0){
-            return redirect()->route('profile.sales');
-        }
+        // if($total_cart_items == 0){
+        //     return redirect()->route('profile.sales');
+        // }
 
         $customer_delivery_adress = $request->delivery_address ?? ' ';
         $customer_name = Auth::user()->fullName;
         $customer_contact_number =  $request->mobile ?? Auth::user()->mobile;
         
-        //$coupon_total_discount = number_format($request->coupon_total_discount,2,'.','');
-        $coupon_total_discount = 0;
+        $coupon_total_discount = number_format($request->coupon_total_discount,2,'.','');
 
         $totalPrice = $request->total_amount;
         $requestId = $this->next_order_number();  
@@ -349,11 +399,13 @@ class CartController extends Controller
           
         }
       
-        // $urls = [
-        //     'notification' => route('cart.payment-notification'),
-        //     'result' => route('profile.sales'),
-        //     'cancel' => route('profile.sales'),
-        // ];
+        $urls = [
+            'notification' => route('cart.payment-notification'),
+            // 'result' => route('profile.sales'),
+            // 'cancel' => route('profile.sales'),
+            'result' => route('cart.front.show'),
+            'cancel' => route('cart.front.show'),
+        ];
         
         // if($request->coupon_counter > 0){
         //     $data = $request->all();
@@ -369,19 +421,19 @@ class CartController extends Controller
         //     }
         // }
 
-        // $base64Code = PaynamicsHelper::payNow($requestId, Auth::user(), $carts, $totalPrice, $urls, false ,$request->delivery_fee, $coupon_total_discount);
+        $base64Code = PaynamicsHelper::payNow($requestId, Auth::user(), $carts, $totalPrice, $urls, false ,$request->delivery_fee, $coupon_total_discount);
 
         Cart::where('user_id', Auth::id())->delete();
-        // if($base64Code){
-        //     if($request->coupon_counter > 0){
-        //         $this->update_coupon_status($request,$salesHeader->id);    
-        //     }
-        // }
+        if($base64Code){
+            if($request->coupon_counter > 0){
+                $this->update_coupon_status($request,$salesHeader->id);    
+            }
+        }
         
         // Mail::to(Auth::user())->send(new SalesCompleted($salesHeader));  
         
-        // return view('theme.paynamics.sender', compact('base64Code'));
-       return redirect(route('cart.front.show'))->with('cart_success','Order has been placed.');
+        return view('theme.paynamics.sender', compact('base64Code'));
+        //return redirect(route('cart.front.show'))->with('cart_success','Order has been placed.');
     }
 
     public function receive_data_from_payment_gateway(Request $request)
