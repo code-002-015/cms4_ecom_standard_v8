@@ -33,24 +33,6 @@ use \UniSharp\LaravelFilemanager\Controllers\LfmController;
 
 
 // Ecommerce Controllers
-use App\Http\Controllers\EcommerceControllers\Product\Front\ProductFrontController;
-use App\Http\Controllers\EcommerceControllers\Product\ProductCategoryController;
-use App\Http\Controllers\EcommerceControllers\Product\ProductController;
-use App\Http\Controllers\EcommerceControllers\InventoryReceiverHeaderController;
-use App\Http\Controllers\EcommerceControllers\DeliverablecitiesController;
-use App\Http\Controllers\EcommerceControllers\PromoController;
-
-use App\Http\Controllers\EcommerceControllers\FavoriteController;
-use App\Http\Controllers\EcommerceControllers\WishlistController;
-
-use App\Http\Controllers\EcommerceControllers\CheckoutController;
-use App\Http\Controllers\EcommerceControllers\ReportsController;
-use App\Http\Controllers\EcommerceControllers\SalesController;
-use App\Http\Controllers\EcommerceControllers\CartController;
-use App\Http\Controllers\EcommerceControllers\ShopController;
-use App\Http\Controllers\EcommerceControllers\MyAccountController;
-
-use App\Http\Controllers\EcommerceControllers\CouponController;
 
 
 use App\Http\Controllers\EcommerceControllers\CustomerFrontController;
@@ -135,15 +117,24 @@ Route::get('/request-demo/{id}',[FrontController::class, 'request_for_demo'])->n
 
 
     // Cart
-        Route::get('/cart', [CartController::class, 'cart'])->name('cart.front.show');
+        
         Route::post('cart-add-product',[CartController::class, 'add_to_cart'])->name('cart.add');
         Route::post('cart-remove-product', [CartController::class, 'remove_product'])->name('cart.remove_product');
         Route::post('cart-update', [CartController::class, 'cart_update'])->name('cart.update');
 
+        Route::post('/add-manual-coupon', [CouponFrontController::class, 'add_manual_coupon'])->name('add-manual-coupon');
+        Route::get('/display-collectibles', [CouponFrontController::class, 'collectibles'])->name('display.collectibles');
+
+
 
         Route::post('cart/deduct-qty','EcommerceControllers\CartController@deduct_qty')->name('cart.deduct');
+        Route::post('proceed-checkout',[CartController::class, 'proceed_checkout'])->name('cart.front.proceed_checkout');
 
-        Route::post('cart/proceed-checkout','EcommerceControllers\CartController@proceed_checkout')->name('cart.front.proceed_checkout');
+
+
+
+        Route::get('/cart', [CartController::class, 'cart'])->name('cart.front.show');
+        Route::post('/payment-notification', [CartController::class, 'receive_data_from_payment_gateway'])->name('cart.payment-notification');
 
     //
 //
@@ -151,12 +142,14 @@ Route::get('/request-demo/{id}',[FrontController::class, 'request_for_demo'])->n
 
 
 // CUSTOMER ROUTES
-Route::group(['middleware' => ['authenticated']], function () {
+    Route::group(['middleware' => ['authenticated']], function () {
     Route::get('/checkout', [CartController::class, 'checkout'])->name('cart.front.checkout');
 //    Route::post('/temp_save',[CartController::class, 'save_sales'])->name('cart.temp_sales');
 //    Route::post('product/review/store', [ProductReviewController::class, 'store'])->name('product.review.store');
 //    Route::get('/checkout', 'EcommerceControllers\CheckoutController@checkout')->name('cart.front.checkout');
     Route::post('/temp_save',[CartController::class, 'save_sales'])->name('cart.temp_sales');
+
+
     Route::get('/account/sales', [SalesFrontController::class, 'sales_list'])->name('profile.sales');
     Route::post('/account/product-reorder',[SalesFrontController::class, 'reorder'])->name('profile.sales-reorder-product');
     Route::post('/account/reorder', [SalesFrontController::class, 'reorder'])->name('my-account.reorder');
@@ -171,6 +164,7 @@ Route::group(['middleware' => ['authenticated']], function () {
     Route::post('/account/change-password', [MyAccountController::class, 'update_password'])->name('my-account.update-password');
 
     Route::get('/account/pay/{id}', [CartController::class, 'pay_again'])->name('my-account.pay-again');
+
 
 });
 

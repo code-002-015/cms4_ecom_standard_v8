@@ -7,13 +7,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Helpers\ListingHelper;
 
-use App\EcommerceModel\Coupon;
-use App\EcommerceModel\CustomerCoupon;
-use App\EcommerceModel\CouponSale;
-use App\EcommerceModel\CouponCart;
-use App\EcommerceModel\Product;
-use App\EcommerceModel\Cart;
-use App\Page;
+use App\Models\Coupon;
+use App\Models\CustomerCoupon;
+use App\Models\CouponSale;
+use App\Models\CouponCart;
+use App\Models\Product;
+use App\Models\Cart;
+use App\Models\Page;
+
 use Auth;
 
 class CouponFrontController extends Controller
@@ -174,15 +175,13 @@ class CouponFrontController extends Controller
 
     public function collectibles(Request $request){
         // Total Purchase Amount Only
-            $couponsMinTotalAmount = Coupon::purchaseMinValue('purchase_amount','purchase_amount_type',$request->total_amount);
-            $couponsMaxTotalAmount = Coupon::purchaseMaxValue('purchase_amount','purchase_amount_type',$request->total_amount);
-            $couponsExactTotalAmount = Coupon::purchaseExactValue('purchase_amount','purchase_amount_type',$request->total_amount);
+            $couponsMinTotalAmount = Coupon::couponPurchaseValue('purchase_amount','purchase_amount_type',$request->total_amount,'min','<=');
+            $couponsMaxTotalAmount = Coupon::couponPurchaseValue('purchase_amount','purchase_amount_type',$request->total_amount,'max','>=');
         //
 
         //Total Purchase Quantity Only
-            $couponsMinTotalQty = Coupon::purchaseMinValue('purchase_qty','purchase_qty_type',$request->total_qty);
-            $couponsMaxTotalQty = Coupon::purchaseMaxValue('purchase_qty','purchase_qty_type',$request->total_qty);
-            $couponsExactTotalQty = Coupon::purchaseExactValue('purchase_qty','purchase_qty_type',$request->total_qty);
+            $couponsMinTotalQty    = Coupon::couponPurchaseValue('purchase_qty','purchase_qty_type',$request->total_qty,'min','<=');
+            $couponsMaxTotalQty    = Coupon::couponPurchaseValue('purchase_qty','purchase_qty_type',$request->total_qty,'max','>=');
         //
 
         // Coupon All Customer Events
@@ -456,10 +455,8 @@ class CouponFrontController extends Controller
 
         $collectibles = collect($couponsMinTotalAmount)
             ->merge($couponsMaxTotalAmount)
-            ->merge($couponsExactTotalAmount)
             ->merge($couponsMinTotalQty)
             ->merge($couponsMaxTotalQty)
-            ->merge($couponsExactTotalQty)
             ->merge($purchased_coupons)
             ->merge($purchased_combined_coupons)
             ->merge($couponEvents)

@@ -146,7 +146,7 @@ class CustomerFrontController extends Controller
             if($cnt > 0)
                 return redirect(route('cart.front.show'));
             else
-                return redirect(route('product.front.list'));
+                return redirect(route('shop'));
         } else {
             Auth::logout();
             return back()->with('error', __('auth.login.incorrect_input'));    
