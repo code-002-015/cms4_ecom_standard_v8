@@ -22,19 +22,28 @@ const CodeMirror_config = {
 };
 
 const editor = grapesjs.init({
+    autorender: true,
     height: "100%",
     showOffsets: 1,
-    avoidDefaults: 1,
     noticeOnUnload: 0,
     container: "#gjs",
-    fromElement: 0,
-    storageManager: {
-        type: "simpleStorage",
-        autoload: true,
-    },
+    fromElement: 1,
+    storageManager: { type: null },
+    // storageManager: {
+    //     id: "gjs-",
+    //     type: "remote",
+    //     autosave: false,
+    //     autoload: true,
+    //     contentTypeJson: false,
+    //     storeComponents: true,
+    //     storeStyles: true,
+    //     storeHtml: true,
+    //     storeCss: true,
+    // },
+
     plugins: [
         PB4,
-        "grapesjs-blocks-basic",
+        "grapesjs-custom-code",
         "grapesjs-parser-postcss",
         "grapesjs-tooltip",
         "grapesjs-style-bg",
@@ -42,19 +51,13 @@ const editor = grapesjs.init({
         "grapesjs-blocks-bootstrap4",
         PB4CustomBlocks,
         "grapesjs-plugin-ckeditor",
-        gjsAnimation,
+		gjsAnimation
     ],
     pluginsOpts: {
-        "grapesjs-blocks-basic": {
-            blocks: ["text", "image", "video", "map"],
-        },
         "grapesjs-blocks-bootstrap4": {
             blocks: {
                 image: false,
-                // container: false,
-                map: false,
-                video: false,
-                link: false,
+				// container: false,
             },
             blockCategories: {
                 components: false,
@@ -91,28 +94,28 @@ const editor = grapesjs.init({
 
     canvas: {
         styles: [
-            app_url + "/theme/ecommerce/css/fonts/default.css",
-            app_url + "/theme/ecommerce/css/bootstrap.css",
-            app_url + "/theme/ecommerce/css/style-vars.css",
-            app_url + "/theme/ecommerce/css/dark.css",
-            app_url + "/theme/ecommerce/css/font-icons.css",
-            app_url + "/theme/ecommerce/css/et-line.css",
-            app_url + "/theme/ecommerce/css/medical-icons.css",
-            app_url + "/theme/ecommerce/css/realestate-icons.css",
-            app_url + "/theme/ecommerce/css/animate.css",
-            app_url + "/theme/ecommerce/css/magnific-popup.css",
-            app_url + "/theme/ecommerce/include/cookie-alert/cookiealert.css",
-            app_url + "/theme/ecommerce/include/slick/slick.css",
-            app_url + "/theme/ecommerce/include/slick/slick-theme.css",
-            app_url + "/theme/ecommerce/css/responsive.css",
-            app_url + "/theme/ecommerce/css/custom.css",
+            app_url + "/theme/sysu/css/bootstrap.css",
+            app_url + "/theme/sysu/css/style-vars.css",
+            app_url + "/theme/sysu/css/dark.css",
+            app_url + "/theme/sysu/css/font-icons.css",
+            app_url + "/theme/sysu/css/et-line.css",
+            app_url + "/theme/sysu/css/animate.css",
+            app_url + "/theme/sysu/css/magnific-popup.css",
+            app_url +
+                "/theme/sysu/include/cookie-alert/cookiealert.css",
+            app_url + "/theme/sysu/include/slick/slick.css",
+            app_url +
+                "/theme/sysu/include/slick/slick-theme.css",
+            app_url + "/theme/sysu/css/responsive.css",
+            app_url + "/theme/sysu/css/custom.css",
         ],
         scripts: [
-            app_url + "/theme/ecommerce/js/jquery.js",
-            app_url + "/theme/ecommerce/js/plugins.js",
-            app_url + "/theme/ecommerce/include/slick/slick.js",
-            app_url + "/theme/ecommerce/include/cookie-alert/cookiealert.js",
-            app_url + "/theme/ecommerce/js/functions.js",
+            app_url + "/theme/sysu/js/jquery.js",
+            app_url + "/theme/sysu/js/plugins.js",
+            app_url + "/theme/sysu/include/slick/slick.js",
+            app_url +
+                "/theme/sysu/include/cookie-alert/cookiealert.js",
+            app_url + "/theme/sysu/js/functions.js",
         ],
     },
 
@@ -196,31 +199,8 @@ const editor = grapesjs.init({
                     "letter-spacing",
                     "color",
                     "line-height",
-                    "text-transform",
-                    "font-style",
                     "text-align",
                     "text-shadow",
-                ],
-                properties: [
-                    {
-                        name: "Text Transform",
-                        property: "text-transform",
-                        type: "select",
-                        defaults: "none",
-                        list: [
-                            { value: "none" },
-                            { value: "capitalize" },
-                            { value: "uppercase" },
-                            { value: "lowercase" },
-                        ],
-                    },
-                    {
-                        name: "Font Style",
-                        property: "font-style",
-                        type: "radio",
-                        defaults: "normal",
-                        list: [{ value: "normal" }, { value: "italic" }],
-                    },
                 ],
             },
             {
@@ -232,7 +212,6 @@ const editor = grapesjs.init({
                     "border",
                     "box-shadow",
                     "background-bg",
-                    "background-color",
                 ],
                 properties: [
                     {
@@ -288,12 +267,6 @@ const editor = grapesjs.init({
     colorPicker: { appendTo: "parent", offset: { top: 30, left: -174 } },
 });
 
-editor.StorageManager.add("simpleStorage", {
-    store(data, clb, clbErr) {
-		$("#json").val(JSON.stringify(data));
-    },
-});
-
 editor.Commands.add("set-device-desktop", {
 	run: (editor) => editor.setDevice("Desktop"),
 });
@@ -305,23 +278,6 @@ editor.Commands.add("set-device-mobile", {
 });
 
 window.addEventListener("load", () => {
-	setTimeout(function() {
-		const categories = editor.BlockManager.getCategories();
-        categories.each((category) => {
-            category.set("open", false).on("change:open", (opened) => {
-                opened.get("open") &&
-                    categories.each((category) => {
-                        category !== opened && category.set("open", false);
-                    });
-            });
-        });
-	}, 1500);
-
-	if(jsComponents != "" && jsComponents != "[]") {
-		editor.addComponents(JSON.parse(jsComponents));
-        editor.setStyle(JSON.parse(jsStyles));
-	}
-
 	$("#desktop-view").on("click", (event) => {
 		editor.Commands.run("set-device-desktop");
 	});
@@ -371,6 +327,12 @@ window.addEventListener("load", () => {
 				"data-original-title",
 				"Hide Styles & Properties"
 			);
+			const modal = editor.Modal;
+			modal.open({
+                title: "My title",
+                content: "My content",
+                attributes: { class: "my-class" },
+            });
 		}
     setTimeout(function() {
       editor.refresh();
@@ -455,8 +417,6 @@ window.addEventListener("load", () => {
 		var cc = confirm("Are you sure you want to clear the canvas?");
 		if (cc == true) {
 			editor.Commands.run("core:canvas-clear");
-			$("#contents").val(editor.getHtml().replace(/(bounce|fadeIn)\sanimated/g, ""));
-			$("#styles").val(editor.getCss());
 		}
 	});
 
@@ -539,7 +499,7 @@ window.addEventListener("load", () => {
 		codeViewer_html.editor.refresh();
 
 		$("#import-component")[0].onclick = (e) => {
-			editor.addComponents(codeViewer_html.editor.getValue().trim());
+			editor.setComponents(codeViewer_html.editor.getValue().trim());
 			$("#editor-import").modal("hide");
 			document.querySelector("#editor-import .modal-body div").innerHTML = "";
 		};
@@ -551,9 +511,8 @@ window.addEventListener("load", () => {
 	}, 1000);
 });
 
-editor.on("component:selected", (component) => {
-	// editor.addComponents(JSON.parse(jsPage)["gjs-components"][0]);
-
+editor.on("component:selected", () => {
+        
 	const commandToAdd = (e) => {
     $("#styles-view-btn").addClass("styles-open");
 		$("#styles-or-traits-mgr").css("margin-right", "0px");
@@ -567,13 +526,6 @@ editor.on("component:selected", (component) => {
 
 	const selectedComponent = editor.getSelected();
 	const defaultToolbar = selectedComponent.get("toolbar");
-
-
-
-	if (selectedComponent.attributes.classes.models.id == "container") {
-        selectedComponent.attributes.type = "Container";
-		editor.refresh();
-    }
 
 	const commandExists = defaultToolbar.some(
 		(item) => item.attributes.class === commandIcon
@@ -601,95 +553,14 @@ editor.on("component:selected", (component) => {
 			],
 		});
 	}
-
-	if(component.attributes.type == "parallax") {
-		const styleManager = editor.StyleManager;
-		const sectors = document.querySelectorAll(".gjs-sm-sector");
-		styleManager.addSector('parallax',{
-			name: 'Background Image',
-			open: false,
-			buildProps: [
-				"background-image",
-			],
-		});
-		setTimeout(() => {
-			for (i = 0; i < sectors.length; i++) {
-				sectors[i].style.display = "none";
-			}
-			document.querySelector(".gjs-sm-sector__parallax").style.display = "block";
-		}, 1000);
-	}
-
-	if (component.attributes.type == "image") {
-        const styleManager = editor.StyleManager;
-        styleManager.addSector("object", {
-            name: "Object",
-            open: false,
-            buildProps: ["object-fit", "object-position"],
-            properties: [
-                {
-                    name: "Object Fit",
-                    property: "object-fit",
-                    type: "select",
-                    defaults: "none",
-                    list: [
-                        { value: "none" },
-                        { value: "fill" },
-                        { value: "contain" },
-                        { value: "cover" },
-                        { value: "scale-down" },
-                    ],
-                },
-                {
-                    name: "Object Position",
-                    property: "object-position",
-                    type: "select",
-                    defaults: "initial",
-                    list: [
-                        { value: "initial" },
-                        { value: "left" },
-                        { value: "center" },
-                        { value: "right" },
-                    ],
-                },
-            ],
-        });
-    }
 });
 
-editor.on('component:deselected', (component) => {
-  if(component.attributes.type == "parallax") {
-    const styleManager = editor.StyleManager;
-    styleManager.removeSector('parallax');
-  }
-  if (component.attributes.type == "image") {
-      const styleManager = editor.StyleManager;
-      styleManager.removeSector("object");
-  }
-})
-
-editor.on("component:remove", (e) => {
+editor.on("component:update", () => {
     $("#contents").val(editor.getHtml().replace(/(bounce|fadeIn)\sanimated/g, ""));
-	$("#styles").val(editor.getCss());
-});
-
-editor.on("component:update", (e) => {
-    $("#contents").val(editor.getHtml().replace(/(bounce|fadeIn)\sanimated/g, ""));
-	$("#styles").val(editor.getCss());
 });
 
 editor.on("component:styleUpdate", () => {
-	$("#contents").val(editor.getHtml().replace(/(bounce|fadeIn)\sanimated/g, ""));
     $("#styles").val(editor.getCss());
-});
-
-// editor.on("storage:start:load", function (e) {
-// 	editor.setComponents(JSON.parse(jsPage)["gjs-components"]);
-// 	editor.setStyle(JSON.parse(jsPage)["gjs-styles"]);
-//     console.log("Loaded ", e);
-// });
-editor.on("storage:store", function (e) {
-    console.log("Stored ", e);
 });
 
 editor.on("change:device", () => {
@@ -780,7 +651,7 @@ cmdm.add('open-assets', {
 	}
 });
 
-var builtInBlocks = ["featured", "welcome", "about", "services"];
+var builtInBlocks = ["featured", "about", "testimonials"];
 
 for(let block in builtInBlocks) {
 	fetch(app_url + "/lib/custom-grapesjs/assets/js/json/" + builtInBlocks[block] + ".json", {
@@ -801,10 +672,7 @@ for(let block in builtInBlocks) {
                         "' />" +
                         json[key].label,
                     content: json[key].content,
-                    category: {
-						label: json[key].category,
-						order: block,
-					},
+                    category: json[key].category,
                     attributes: json[key].attributes,
                 });
             }

@@ -1,9 +1,35 @@
 const gjsAnimation = (editor) => {
 	// Update default link component
   const comps = editor.DomComponents;
+  const defaultType = comps.getType("default");
+  const defaultModel = defaultType.model;
+
+	editor.DomComponents.addType("default", {
+    model: defaultModel.extend({
+      defaults: Object.assign({}, defaultModel.prototype.defaults, {
+        traits: [
+          {
+              type: "animation",
+              label: "Animation",
+              name: "animation",
+          },
+          {
+              type: "duration",
+              label: "Duration(s)",
+              name: "duration",
+          },
+          {
+              type: "delay",
+              label: "Delay(s)",
+              name: "delay",
+          },
+        ].concat(defaultModel.prototype.defaults.traits),
+      }),
+    }),
+  });
 
   const containerType = comps.getType("container");
-  const containerModel = containerType.model;
+  const containerModel = defaultType.model;
 
   editor.DomComponents.addType("container", {
     model: containerModel.extend({

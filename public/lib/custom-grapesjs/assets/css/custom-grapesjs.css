@@ -436,7 +436,6 @@ button:focus {
 
 #gjs {
   margin-top: 49px;
-  height: calc(100% - 49px) !important;
 }
 
 .panel-blocks-header {
