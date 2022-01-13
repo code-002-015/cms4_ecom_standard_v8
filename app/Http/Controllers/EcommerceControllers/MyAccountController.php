@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\EcommerceControllers;
 
-use App\EcommerceModel\Cart;
-use App\EcommerceModel\SalesHeader;
-use App\Page;
-use App\User;
+use App\Models\Cart;
+use App\Models\SalesHeader;
+use App\Models\Page;
+use App\Models\User;
 use Auth;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -28,11 +28,11 @@ class MyAccountController extends Controller
             $selectedTab = ($request->tab == 'my-address') ? 2 : $selectedTab;
         }
 
-        return view('theme.lydias.ecommerce.my-account.manage-account', compact('member', 'user', 'selectedTab'));
+        return view('theme.'.env('FRONTEND_TEMPLATE').'.pages.manage-account', compact('member', 'user', 'selectedTab'));
     }
 
     public function update_personal_info(Request $request)
-    {   
+    {
         if($request->is_org==1){
             $user_add = User::whereId(Auth::id())->update([
                 'organization' => $request->organization,
@@ -79,7 +79,7 @@ class MyAccountController extends Controller
         $page = new Page();
         $page->name = 'Change Password';
 
-        return view('theme.lydias.ecommerce.my-account.change-password',compact('page'));
+        return view('theme.'.env('FRONTEND_TEMPLATE').'.pages.change-password',compact('page'));
     }
 
     public function update_password(Request $request)

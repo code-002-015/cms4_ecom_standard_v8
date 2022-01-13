@@ -1,0 +1,11 @@
+[
+    {
+        "id": "1",
+        "name": "services1",
+        "label": "Services 1",
+        "image": "services/1.jpg",
+        "content": "<section style='padding:100px 0'><div data-gjs-type='container' class='container'><div data-gjs-type='row' class='row'><div class='col-lg-9'><h3>We specialize in Robust Software Solutions</h3><div data-gjs-type='divider' class='gpd-divider' style='height: 2px;width:40px;margin: 0px 0px 30px 0px;background-color: #444;'></div><p>Lasting change, stakeholders development Angelina Jolie world problemsolving progressive. Courageous; social entrepreneurship change;accelerate resolve pursue these aspirations asylum.</p></div><div class='col-lg-3'><a data-gjs-type='button' class='button button-3d'><div data-gjs-type='text' data-highlightable='1'>Check Our Services</div></a></div></div></div</section>",
+        "category": "Services",
+        "attributes": { "class": "gjs-built-in-block" }
+    }
+]

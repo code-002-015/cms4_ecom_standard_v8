@@ -6,7 +6,7 @@
 				<!-- Logo
 				============================================= -->
 				<div id="logo" class="me-lg-4">
-					<a href="demo-shop.html" class="standard-logo"><img src="{{ asset('theme/'.env('THEME_FOLDER').'/images/logo.png') }}" alt="Canvas Logo"></a>
+					<a href="/" class="standard-logo"> <img src="{{ asset('storage').'/logos/'.Setting::getFaviconLogo()->company_logo }}" alt="{{''.env('COMPANY_NAME')}}"></a>
 					<a href="demo-shop.html" class="retina-logo"><img src="{{ asset('theme/'.env('THEME_FOLDER').'/images/logo@2x.png') }}" alt="Canvas Logo"></a>
 				</div><!-- #logo end -->
 
@@ -16,7 +16,7 @@
 					============================================= -->
 					<div id="top-account">
 						@if(auth()->check())
-							<a href="{{ route('customer-front.login') }}"><i class="icon-line2-user me-1 position-relative" style="top: 1px;"></i><span class="d-none d-sm-inline-block font-primary fw-medium">{{ auth()->user()->fullname }}</span></a>
+							<a href="{{ route('my-account.manage-account') }}"><i class="icon-line2-user me-1 position-relative" style="top: 1px;"></i><span class="d-none d-sm-inline-block font-primary fw-medium">{{ auth()->user()->fullname }}</span></a>
 						@else
 							<a href="{{ route('customer-front.login') }}"><i class="icon-line2-user me-1 position-relative" style="top: 1px;"></i><span class="d-none d-sm-inline-block font-primary fw-medium">Login</span></a>
 						@endif

@@ -1,0 +1,11 @@
+[
+    {
+        "id": "1",
+        "name": "welcome1",
+        "label": "Welcome 1",
+        "image": "welcome/1.jpg",
+        "content": "<section style='padding:100px 0'><div data-gjs-type='container' class='container'><div data-gjs-type='row' class='row'><div class='col-md-12 col-lg-1'></div><div class='col-md-12 col-lg-10' style='text-align:center'><h1>Welcome! To our Website.</h1><h2>Donec condimentum malesuada nibh, sit amet tempus mi posuere eget. Praesent tincidunt lacus ac tincidunt pharetra.</h2><p>Donec tristique, orci nec interdum dapibus, odio velit venenatis nibh, ac sagittis mauris velit ut erat. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Phasellus ac vulputate lectus.</p><a data-gjs-type='button' class='button button-3d'><div data-gjs-type='text' data-highlightable='1'>Learn More</div></a></div><div class='col-md-12 col-lg-1'></div></div></div</section>",
+        "category": "Welcome",
+        "attributes": { "class": "gjs-built-in-block" }
+    }
+]
