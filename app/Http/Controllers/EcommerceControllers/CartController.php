@@ -275,9 +275,9 @@ class CartController extends Controller
         $page = new Page();
         $page->name = 'Checkout';
 
-        $orders = Cart::where('user_id',Auth::id())->get();      
+        $orders    = Cart::where('user_id',Auth::id())->get();      
         $locations = Deliverablecities::where('status','PUBLISHED')->orderBy('name')->get();
-        $cart = CouponCartDiscount::where('customer_id',Auth::id())->first();
+        $cart      = CouponCartDiscount::where('customer_id',Auth::id())->first();
 
         $coupons = CouponCart::where('customer_id', Auth::id())->get();
 
@@ -291,8 +291,8 @@ class CartController extends Controller
         $sales = 
         $urls = [
             'notification' => route('cart.payment-notification'),
-            // 'result' => route('profile.sales'),
-            // 'cancel' => route('profile.sales'),
+            'result' => route('profile.sales'),
+            'cancel' => route('profile.sales'),
             'result' => route('cart.front.show'),
             'cancel' => route('cart.front.show'),
         ];
@@ -322,17 +322,15 @@ class CartController extends Controller
     public function save_sales(Request $request) 
     { 
         $total_cart_items = Cart::where('user_id',Auth::id())->count();
-        // if($total_cart_items == 0){
-        //     return redirect()->route('profile.sales');
-        // }
 
-        $customer_delivery_adress = $request->delivery_address ?? ' ';
+        $customer_delivery_adress = $request->address_street;
         $customer_name = Auth::user()->fullName;
         $customer_contact_number =  $request->mobile ?? Auth::user()->mobile;
         
         $coupon_total_discount = number_format($request->coupon_total_discount,2,'.','');
 
-        $totalPrice = $request->total_amount;
+        $totalPrice  = number_format($request->total_amount,2,'.','');
+        $deliveryFee = number_format($request->delivery_fee,2,'.','');
         $requestId = $this->next_order_number();  
 
         $salesHeader = SalesHeader::create([
@@ -343,10 +341,10 @@ class CartController extends Controller
             'customer_address' => $customer_delivery_adress,
             'customer_delivery_adress' => $customer_delivery_adress,
             'delivery_tracking_number' => ' ',
-            'delivery_fee_amount' => number_format($request->delivery_fee,2,'.',''),
+            'delivery_fee_amount' => $deliveryFee,
             'other_instruction' => $request->instruction,
             'delivery_courier' => ' ',
-            'delivery_type' => 'd2d',
+            'delivery_type' => $request->shipping_type,
             'gross_amount' => number_format($totalPrice,2,'.','') ,
             'tax_amount' => 0,
             'net_amount' => number_format($totalPrice,2,'.',''),
@@ -354,6 +352,7 @@ class CartController extends Controller
             'payment_status' => 'UNPAID',
             'delivery_status' => 'Waiting for Payment',
             'status' => 'active',
+            'other_instruction' => $request->instruction
         ]);
      
         $carts = Cart::where('user_id',Auth::id())->get();
@@ -401,27 +400,27 @@ class CartController extends Controller
       
         $urls = [
             'notification' => route('cart.payment-notification'),
-            // 'result' => route('profile.sales'),
-            // 'cancel' => route('profile.sales'),
+            'result' => route('profile.sales'),
+            'cancel' => route('profile.sales'),
             'result' => route('cart.front.show'),
             'cancel' => route('cart.front.show'),
         ];
         
-        // if($request->coupon_counter > 0){
-        //     $data = $request->all();
-        //     $coupons = $data['couponid'];
-        //     foreach($coupons as $coupon){
-        //         $exist = CouponCart::where('customer_id',Auth::id())->where('coupon_id',$coupon)->exists();
-        //         if(!$exist){
-        //            CouponCart::create([
-        //                 'coupon_id' => $coupon,
-        //                 'customer_id' => Auth::id()
-        //             ]); 
-        //         } 
-        //     }
-        // }
+        if($request->coupon_counter > 0){
+            $data = $request->all();
+            $coupons = $data['couponid'];
+            foreach($coupons as $coupon){
+                $exist = CouponCart::where('customer_id',Auth::id())->where('coupon_id',$coupon)->exists();
+                if(!$exist){
+                   CouponCart::create([
+                        'coupon_id' => $coupon,
+                        'customer_id' => Auth::id()
+                    ]); 
+                } 
+            }
+        }
 
-        $base64Code = PaynamicsHelper::payNow($requestId, Auth::user(), $carts, $totalPrice, $urls, false ,$request->delivery_fee, $coupon_total_discount);
+        $base64Code = PaynamicsHelper::payNow($requestId, Auth::user(), $carts, $totalPrice, $urls, false ,$deliveryFee, $coupon_total_discount, $request->sf_discount_amount);
 
         Cart::where('user_id', Auth::id())->delete();
         if($base64Code){

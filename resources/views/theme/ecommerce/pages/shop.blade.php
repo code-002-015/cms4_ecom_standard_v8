@@ -6,7 +6,7 @@
 
 		<!-- Shop Categories
 		============================================= -->
-		<div class="fancy-title title-border title-center mb-4">
+		{{--<div class="fancy-title title-border title-center mb-4">
 			<h4>Shop popular categories</h4>
 		</div>
 
@@ -60,7 +60,7 @@
 					</div>
 				</a>
 			</div>
-		</div>
+		</div>--}}
 
 		<!-- Featured Carousel
 		============================================= -->
@@ -76,8 +76,9 @@
 			<div class="oc-item">
 				<div class="product">
 					<div class="product-image">
-						<a href="#"><img src="{{ asset('theme/ecommerce/images/items/featured/1.jpg') }}" alt="Round Neck T-shirts"></a>
-						<a href="#"><img src="{{ asset('theme/ecommerce/images/items/featured/1-1.jpg') }}" alt="Round Neck T-shirts"></a>
+						@foreach($p->photos as $photo)
+							<a href="#"><img src="{{ asset('storage/products/'.$photo->path) }}" alt=""></a>
+						@endforeach
 						<div class="sale-flash badge bg-danger p-2">Sale!</div>
 						<div class="bg-overlay">
 							<div class="bg-overlay-content align-items-end justify-content-between" data-hover-animate="fadeIn" data-hover-speed="400">
@@ -100,7 +101,7 @@
 
 	<!-- New Arrivals Men
 	============================================= -->
-	<div class="container clearfix">
+	{{--<div class="container clearfix">
 
 		<div class="fancy-title title-border topmargin-sm mb-4 title-center">
 			<h4>New Arrivals: Men</h4>
@@ -457,7 +458,7 @@
 
 		</div>
 
-	</div>
+	</div>--}}
 
 	<!-- Sign Up
 	============================================= -->

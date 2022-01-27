@@ -94,28 +94,28 @@ const editor = grapesjs.init({
 
     canvas: {
         styles: [
-            app_url + "/theme/sysu/css/bootstrap.css",
-            app_url + "/theme/sysu/css/style-vars.css",
-            app_url + "/theme/sysu/css/dark.css",
-            app_url + "/theme/sysu/css/font-icons.css",
-            app_url + "/theme/sysu/css/et-line.css",
-            app_url + "/theme/sysu/css/animate.css",
-            app_url + "/theme/sysu/css/magnific-popup.css",
+            app_url + "/theme/cms4/css/bootstrap.css",
+            app_url + "/theme/cms4/css/style-vars.css",
+            app_url + "/theme/cms4/css/dark.css",
+            app_url + "/theme/cms4/css/font-icons.css",
+            app_url + "/theme/cms4/css/et-line.css",
+            app_url + "/theme/cms4/css/animate.css",
+            app_url + "/theme/cms4/css/magnific-popup.css",
             app_url +
-                "/theme/sysu/include/cookie-alert/cookiealert.css",
-            app_url + "/theme/sysu/include/slick/slick.css",
+                "/theme/cms4/include/cookie-alert/cookiealert.css",
+            app_url + "/theme/cms4/include/slick/slick.css",
             app_url +
-                "/theme/sysu/include/slick/slick-theme.css",
-            app_url + "/theme/sysu/css/responsive.css",
-            app_url + "/theme/sysu/css/custom.css",
+                "/theme/cms4/include/slick/slick-theme.css",
+            app_url + "/theme/cms4/css/responsive.css",
+            app_url + "/theme/cms4/css/custom.css",
         ],
         scripts: [
-            app_url + "/theme/sysu/js/jquery.js",
-            app_url + "/theme/sysu/js/plugins.js",
-            app_url + "/theme/sysu/include/slick/slick.js",
+            app_url + "/theme/cms4/js/jquery.js",
+            app_url + "/theme/cms4/js/plugins.js",
+            app_url + "/theme/cms4/include/slick/slick.js",
             app_url +
-                "/theme/sysu/include/cookie-alert/cookiealert.js",
-            app_url + "/theme/sysu/js/functions.js",
+                "/theme/cms4/include/cookie-alert/cookiealert.js",
+            app_url + "/theme/cms4/js/functions.js",
         ],
     },
 

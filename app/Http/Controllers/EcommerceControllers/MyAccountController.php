@@ -28,7 +28,7 @@ class MyAccountController extends Controller
             $selectedTab = ($request->tab == 'my-address') ? 2 : $selectedTab;
         }
 
-        return view('theme.'.env('FRONTEND_TEMPLATE').'.pages.manage-account', compact('member', 'user', 'selectedTab'));
+        return view('theme.ecommerce.pages.manage-account', compact('member', 'user', 'selectedTab'));
     }
 
     public function update_personal_info(Request $request)
@@ -79,7 +79,7 @@ class MyAccountController extends Controller
         $page = new Page();
         $page->name = 'Change Password';
 
-        return view('theme.'.env('FRONTEND_TEMPLATE').'.pages.change-password',compact('page'));
+        return view('theme.ecommerce.pages.change-password',compact('page'));
     }
 
     public function update_password(Request $request)

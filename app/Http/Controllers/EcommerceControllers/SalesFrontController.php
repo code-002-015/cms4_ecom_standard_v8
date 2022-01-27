@@ -16,14 +16,14 @@ use Illuminate\Support\Facades\Auth;
 
 class SalesFrontController extends Controller
 {
-    public function sales_list(){
+    public function orders(){
 
-        $sales = SalesHeader::where('user_id',Auth::id())->orderBy('id','desc')->get();
+        $sales = SalesHeader::where('user_id',Auth::id())->orderBy('id','desc')->paginate(2);
 
         $page = new Page();
         $page->name = 'Sales Transaction';
 
-        return view('theme.'.env('FRONTEND_TEMPLATE').'.pages.sales',compact('sales','page'));
+        return view('theme.ecommerce.pages.sales',compact('sales','page'));
     }
 
     public function cancel_order(Request $request){

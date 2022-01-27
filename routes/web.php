@@ -93,7 +93,6 @@ Route::get('/request-demo/{id}',[FrontController::class, 'request_for_demo'])->n
 
 // Ecommerce Pages
     Route::get('/login', [CustomerFrontController::class, 'login'])->name('customer-front.login');
-    Route::get('/account-logout', [LoginController::class, 'logout'])->name('account.logout');
 
     Route::post('/customer-sign-up', [CustomerFrontController::class, 'customer_sign_up'])->name('customer-front.customer-sign-up');
     Route::post('/login', [CustomerFrontController::class, 'customer_login'])->name('customer-front.customer_login');
@@ -104,53 +103,39 @@ Route::get('/request-demo/{id}',[FrontController::class, 'request_for_demo'])->n
     Route::post('/reset-password', 'EcommerceControllers\EcommerceFrontController@reset')->name('ecommerce.reset_password_post');
 
 
-    Route::get('/shop', [ShopController::class, 'index'])->name('shop');
-
-
+    Route::get('/home', [ShopController::class, 'index'])->name('shop');
+    Route::any('/product-list', [ProductFrontController::class, 'list'])->name('product.front.list');
     Route::get('/products/{slug}', [ProductFrontController::class, 'show'])->name('product.front.show');
 
 
+    
+    Route::post('cart-add-product',[CartController::class, 'add_to_cart'])->name('cart.add');
+    Route::post('cart-remove-product', [CartController::class, 'remove_product'])->name('cart.remove_product');
+    Route::post('cart-update', [CartController::class, 'cart_update'])->name('cart.update');
+
+
+    Route::post('cart/deduct-qty','EcommerceControllers\CartController@deduct_qty')->name('cart.deduct');
+    Route::post('proceed-checkout',[CartController::class, 'proceed_checkout'])->name('cart.front.proceed_checkout');
 
 
 
+    Route::get('/cart', [CartController::class, 'cart'])->name('cart.front.show');
+    Route::post('/payment-notification', [CartController::class, 'receive_data_from_payment_gateway'])->name('cart.payment-notification');
 
-
-
-    // Cart
-        
-        Route::post('cart-add-product',[CartController::class, 'add_to_cart'])->name('cart.add');
-        Route::post('cart-remove-product', [CartController::class, 'remove_product'])->name('cart.remove_product');
-        Route::post('cart-update', [CartController::class, 'cart_update'])->name('cart.update');
-
-        Route::post('/add-manual-coupon', [CouponFrontController::class, 'add_manual_coupon'])->name('add-manual-coupon');
-        Route::get('/display-collectibles', [CouponFrontController::class, 'collectibles'])->name('display.collectibles');
-
-
-
-        Route::post('cart/deduct-qty','EcommerceControllers\CartController@deduct_qty')->name('cart.deduct');
-        Route::post('proceed-checkout',[CartController::class, 'proceed_checkout'])->name('cart.front.proceed_checkout');
-
-
-
-
-        Route::get('/cart', [CartController::class, 'cart'])->name('cart.front.show');
-        Route::post('/payment-notification', [CartController::class, 'receive_data_from_payment_gateway'])->name('cart.payment-notification');
-
-    //
 //
 
 
 
 // CUSTOMER ROUTES
-    Route::group(['middleware' => ['authenticated']], function () {
+Route::group(['middleware' => ['authenticated']], function () {
     Route::get('/checkout', [CartController::class, 'checkout'])->name('cart.front.checkout');
-//    Route::post('/temp_save',[CartController::class, 'save_sales'])->name('cart.temp_sales');
-//    Route::post('product/review/store', [ProductReviewController::class, 'store'])->name('product.review.store');
-//    Route::get('/checkout', 'EcommerceControllers\CheckoutController@checkout')->name('cart.front.checkout');
+    //    Route::post('/temp_save',[CartController::class, 'save_sales'])->name('cart.temp_sales');
+    //    Route::post('product/review/store', [ProductReviewController::class, 'store'])->name('product.review.store');
+    //    Route::get('/checkout', 'EcommerceControllers\CheckoutController@checkout')->name('cart.front.checkout');
     Route::post('/temp_save',[CartController::class, 'save_sales'])->name('cart.temp_sales');
 
 
-    Route::get('/account/sales', [SalesFrontController::class, 'sales_list'])->name('profile.sales');
+    Route::get('/my-orders', [SalesFrontController::class, 'orders'])->name('profile.sales');
     Route::post('/account/product-reorder',[SalesFrontController::class, 'reorder'])->name('profile.sales-reorder-product');
     Route::post('/account/reorder', [SalesFrontController::class, 'reorder'])->name('my-account.reorder');
     Route::post('/account/cancel/order', [SalesFrontController::class, 'cancel_order'])->name('my-account.cancel-order');
@@ -160,10 +145,15 @@ Route::get('/request-demo/{id}',[FrontController::class, 'request_for_demo'])->n
     Route::post('/account/manage/update-address', [MyAccountController::class, 'update_address_info'])->name('my-account.update-address-info');
 
     Route::get('/account/change-password', [MyAccountController::class, 'change_password'])->name('my-account.change-password');
-
     Route::post('/account/change-password', [MyAccountController::class, 'update_password'])->name('my-account.update-password');
+    Route::get('/account-logout', [LoginController::class, 'logout'])->name('account.logout');
 
     Route::get('/account/pay/{id}', [CartController::class, 'pay_again'])->name('my-account.pay-again');
+
+
+    Route::post('/add-manual-coupon', [CouponFrontController::class, 'add_manual_coupon'])->name('add-manual-coupon');
+    Route::get('/display-collectibles', [CouponFrontController::class, 'collectibles'])->name('display.collectibles');
+
 
 
 });
@@ -304,7 +294,7 @@ Route::group(['prefix' => env('APP_PANEL', 'cerebro')], function (){
 
             // Products
                 Route::resource('/admin/products', ProductController::class);
-                Route::get('/products-advance-search', 'Product\ProductController@advance_index')->name('product.index.advance-search');
+                Route::get('/products-advance-search', [ProductController::class, 'advance_index'])->name('product.index.advance-search');
                 Route::post('/admin/product-get-slug', [ProductController::class, 'get_slug'])->name('product.get-slug');
                 Route::post('/admin/products/upload', [ProductController::class, 'upload'])->name('products.upload');
 
