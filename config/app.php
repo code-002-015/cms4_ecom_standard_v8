@@ -274,9 +274,9 @@ return [
         // Ecommerce Controllers
         'CouponFrontController' => App\Http\Controllers\EcommerceControllers\CouponFrontController::class,
         'CouponController' => App\Http\Controllers\EcommerceControllers\CouponController::class,
-        'ProductFrontController' => App\Http\Controllers\EcommerceControllers\ProductFrontController::class,
+        'ProductFrontController' => App\Http\Controllers\EcommerceControllers\Product\Front\ProductFrontController::class,
         'ProductCategoryController' => App\Http\Controllers\EcommerceControllers\ProductCategoryController::class,
-        'ProductController' => App\Http\Controllers\EcommerceControllers\ProductController::class,
+        'ProductController' => App\Http\Controllers\EcommerceControllers\Product\ProductController::class,
         'InventoryReceiverHeaderController' => App\Http\Controllers\EcommerceControllers\InventoryReceiverHeaderController::class,
         'DeliverablecitiesController' => App\Http\Controllers\EcommerceControllers\DeliverablecitiesController::class,
         'PromoController' => App\Http\Controllers\EcommerceControllers\PromoController::class,
@@ -287,6 +287,7 @@ return [
         'SalesController' => App\Http\Controllers\EcommerceControllers\SalesController::class,
         'CartController' => App\Http\Controllers\EcommerceControllers\CartController::class,
         'ShopController' => App\Http\Controllers\EcommerceControllers\ShopController::class,
+        'MyAccountController' => App\Http\Controllers\EcommerceControllers\MyAccountController::class,
 
         
         

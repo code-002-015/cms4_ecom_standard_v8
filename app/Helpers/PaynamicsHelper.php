@@ -12,7 +12,7 @@ use Auth;
 class PaynamicsHelper
 {
 
-    public static function payNow($requestId, $member, $cart, $totalAmount, $url, $withMembershipFee = false, $deliveryFee = 0, $total_discount)
+    public static function payNow($requestId, $member, $cart, $totalAmount, $url, $withMembershipFee = false, $deliveryFee = 0, $total_discount, $shipping_fee_discount = 0)
     {
         $merchant = Setting::paynamics_merchant();
         $allowed_payments = strtoupper(Setting::info()->accepted_payments);        
@@ -32,31 +32,12 @@ class PaynamicsHelper
             $itemXml = $itemXml . "<Items><itemname>Order Discount</itemname><quantity>1</quantity><amount>-{$total_discount}</amount></Items>";    
         }
 
-
-        $coupons = CouponCart::where('customer_id',Auth::id())->get();
-        $totalDiscount = 0;
-        $totalSfDiscount = 0;
-        // $sfDiscount = 0;
-        foreach($coupons as $coupon){
-            $c = Coupon::find($coupon->coupon_id);
-
-            if(isset($c->location)){
-                if($c->location_discount_type == 'partial'){
-                    $sfDiscount = number_format($c->location_discount_amount,2,'.','');
-                } else {
-                    $sfDiscount = $deliveryFee;
-                }
-                $totalSfDiscount += $sfDiscount;
-            }  
-        }
-
         if ($deliveryFee > 0) {
-            $deliveryFee = number_format($deliveryFee, 2, '.', '');
             $itemXml = $itemXml . "<Items><itemname>Delivery Fee</itemname><quantity>1</quantity><amount>{$deliveryFee}</amount></Items>";
         }
 
-        if($totalSfDiscount > 0){
-            $itemXml = $itemXml . "<Items><itemname>Delivery Discount</itemname><quantity>1</quantity><amount>-{$totalSfDiscount}</amount></Items>";    
+        if($shipping_fee_discount > 0){
+            $itemXml = $itemXml . "<Items><itemname>Delivery Discount</itemname><quantity>1</quantity><amount>-{$shipping_fee_discount}</amount></Items>";    
         }
 
         

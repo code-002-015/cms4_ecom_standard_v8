@@ -95,18 +95,18 @@ var editorgjs = grapesjs.init({
     },
     canvas: {
         styles: [
-            '{{ env('APP_URL') }}/theme/sysu/css/bootstrap.css',
-            '{{ env('APP_URL') }}theme/sysu/css/style-vars.css'
-            // "{{ asset('theme/sysu/css/dark.css') }}",
-            // "{{ asset('theme/sysu/css/font-icons.css') }}",
-            // "{{ asset('theme/sysu/css/et-line.css') }}",
-            // "{{ asset('theme/sysu/css/animate.css') }}",
-            // "{{ asset('theme/sysu/css/magnific-popup.css') }}",
-            // "{{ asset('theme/sysu/include/cookie-alert/cookiealert.css') }}",
-            // "{{ asset('theme/sysu/include/slick/slick.css') }}",
-            // "{{ asset('theme/sysu/include/slick/slick-theme.css') }}",
-            // "{{ asset('theme/sysu/css/responsive.css') }}",
-            // "{{ asset('theme/sysu/css/custom.css') }}",
+            '{{ env('APP_URL') }}/theme/cms4/css/bootstrap.css',
+            '{{ env('APP_URL') }}theme/cms4/css/style-vars.css'
+            // "{{ asset('theme/cms4/css/dark.css') }}",
+            // "{{ asset('theme/cms4/css/font-icons.css') }}",
+            // "{{ asset('theme/cms4/css/et-line.css') }}",
+            // "{{ asset('theme/cms4/css/animate.css') }}",
+            // "{{ asset('theme/cms4/css/magnific-popup.css') }}",
+            // "{{ asset('theme/cms4/include/cookie-alert/cookiealert.css') }}",
+            // "{{ asset('theme/cms4/include/slick/slick.css') }}",
+            // "{{ asset('theme/cms4/include/slick/slick-theme.css') }}",
+            // "{{ asset('theme/cms4/css/responsive.css') }}",
+            // "{{ asset('theme/cms4/css/custom.css') }}",
         ],
         scripts: [
             "https://code.jquery.com/jquery-3.3.1.slim.min.js",

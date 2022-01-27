@@ -38,11 +38,6 @@
 
 					<div class="w-100"></div>
 
-					<div class="col-12 form-group">
-						<label for="billing-form-address">Address:</label>
-						<input type="text" id="billing-form-address" name="delivery_address" value="{{ auth()->user()->address }}" class="sm-form-control" />
-					</div>
-
 					<div class="col-md-12 form-group">
 						<label for="billing-form-email">Email Address:</label>
 						<input type="email" id="billing-form-email" name="email" value="{{ auth()->user()->email }}" class="sm-form-control" />
@@ -57,18 +52,18 @@
 				<div class="col-lg-6">
 					<h3>Shipping Address</h3>
 					<div class="accordion clearfix">
-						<div class="accordion-header">
+						<div class="accordion-header" onclick="shipping_type('d2d');">
 							<div class="accordion-icon">
 								<i class="accordion-closed icon-line-minus"></i>
 								<i class="accordion-open icon-line-check"></i>
 							</div>
 							<div class="accordion-title">
-								Cash On Delivery
+								Door-to-door Delivery
 							</div>
 						</div>
 						<div class="accordion-content clearfix">Donec sed odio dui. Nulla vitae elit libero, a pharetra augue. Nullam id dolor id nibh ultricies vehicula ut id elit. Integer posuere erat a ante venenatis dapibus posuere velit aliquet.</div>
 
-						<div class="accordion-header">
+						<!-- <div class="accordion-header" onclick="shipping_type('stp');">
 							<div class="accordion-icon">
 								<i class="accordion-closed icon-line-minus"></i>
 								<i class="accordion-open icon-line-check"></i>
@@ -77,52 +72,31 @@
 								Store Pickup
 							</div>
 						</div>
-						<div class="accordion-content clearfix">Integer posuere erat a ante venenatis dapibus posuere velit aliquet. Duis mollis, est non commodo luctus. Aenean lacinia bibendum nulla sed consectetur. Cras mattis consectetur purus sit amet fermentum.</div>
+						<div class="accordion-content clearfix">Integer posuere erat a ante venenatis dapibus posuere velit aliquet. Duis mollis, est non commodo luctus. Aenean lacinia bibendum nulla sed consectetur. Cras mattis consectetur purus sit amet fermentum.</div> -->
 
-						<div class="accordion-header">
-							<div class="accordion-icon">
-								<i class="accordion-closed icon-line-minus"></i>
-								<i class="accordion-open icon-line-check"></i>
-							</div>
-							<div class="accordion-title">
-								Paypal
-							</div>
-						</div>
-						<div class="accordion-content clearfix">Nullam id dolor id nibh ultricies vehicula ut id elit. Integer posuere erat a ante venenatis dapibus posuere velit aliquet. Duis mollis, est non commodo luctus. Aenean lacinia bibendum nulla sed consectetur.</div>
-					</div>
-					<div class="col-md-6 form-group">
-						<label for="shipping-form-name">Name:</label>
-						<input type="text" id="shipping-form-name" name="shipping-form-name" value="" class="sm-form-control" />
-					</div>
-
-					<div class="col-md-6 form-group">
-						<label for="shipping-form-lname">Last Name:</label>
-						<input type="text" id="shipping-form-lname" name="shipping-form-lname" value="" class="sm-form-control" />
+						<input type="hidden" name="shipping_type" id="shipping_type" value="d2d">
 					</div>
 
 					<div class="w-100"></div>
 
 					<div class="col-12 form-group">
 						<label for="shipping-form-address">Address:</label>
-						<input type="text" id="shipping-form-address" name="shipping-form-address" value="" class="sm-form-control" />
+						<input type="text" name="address_street" id="address_street" value="" class="sm-form-control" />
 					</div>
 
 					<div class="col-12 form-group">
-						<input type="text" id="shipping-form-address2" name="shipping-form-adress" value="" class="sm-form-control" />
-					</div>
-
-					<div class="col-12 form-group">
-						<label for="shipping-form-city">City / Town</label>
-						<select class="form-control" id="sfee">
-							@foreach($locations as $sfee)
-								<option value="{{$sfee->rate}}">{{$sfee->name}}</option>
+						<label for="shipping-form-city">Municipality</label>
+						<select class="form-control" name="location" id="location">
+							<option selected value="">Choose Municipality</option>
+							@foreach($locations as $loc)
+								<option value="{{$loc->name}}|{{$loc->rate}}">{{$loc->name}}</option>
 							@endforeach
 						</select>
 					</div>
 
 					<div class="col-12 form-group">
-						<label for="shipping-form-message">Notes <small>*</small></label>
-						<textarea class="sm-form-control" id="shipping-form-message" name="shipping-form-message" rows="6" cols="30"></textarea>
+						<label for="shipping-form-message">Instruction <small>*</small></label>
+						<textarea class="sm-form-control" name="instruction" rows="6" cols="30"></textarea>
 					</div>				
 				</div>
 
@@ -177,29 +151,42 @@
 							</tbody>
 						</table>
 					</div>
-					<div id="couponDiv">
-						@foreach($coupons as $cpn)
-                        <div class="coupon-item p-2 border rounded mb-1">
-                            <div class="row no-gutters">
-                                <div class="col-12">
-                                    <div class="coupon-item-name">
-                                        <h5 class="m-0">{{ $cpn->details->name }}<span></span></h5>
-                                    </div>
-                                    <div class="coupon-item-desc small mb-1">
-                                        <span>{{ $cpn->details->description }}</span>
-                                    </div>
-                                    <div class="coupon-item-btns">
-                                        <input type="hidden" name="couponUsage[]" value="0">
-                                        <input type="hidden" id="coupon_combinationcid" value="combination">
-                                        <input type="hidden" name="couponid[]" value="cid">
-                                        <input type="hidden" name="coupon_productid[]" value="0">
-                                        <button type="button" class="btn btn-secondary btn-sm me-2" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="right" data-bs-content="{{ $cpn->details->terms_and_conditions }}">Terms & Condition</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        @endforeach
-                    </div>
+
+					<div id="couponList">
+						<div id="couponDiv">
+							@php $counter = 0; $soloCouponCounter = 0; @endphp
+							@foreach($coupons as $cpn)
+							@php 
+	                            $counter++; 
+
+	                            if($cpn->details->combination == 0){
+	                                $soloCouponCounter++;
+	                            }
+	                        @endphp
+	                        <div class="coupon-item p-2 border rounded mb-1">
+	                            <div class="row no-gutters">
+	                                <div class="col-12">
+	                                    <div class="coupon-item-name">
+	                                        <h5 class="m-0">{{ $cpn->details->name }}<span></span></h5>
+	                                    </div>
+	                                    <div class="coupon-item-desc small mb-1">
+	                                        <span>{{ $cpn->details->description }}</span>
+	                                    </div>
+	                                    <div class="coupon-item-btns">
+	                                        <input type="hidden" name="couponUsage[]" value="0">
+	                                        <input type="hidden" id="coupon_combination" value="{{$cpn->details->combination}}">
+	                                        <input type="hidden" name="couponid[]" value="{{$cpn->coupon_id}}">
+	                                        <input type="hidden" name="coupon_productid[]" value="{{$cpn->product_id}}">
+	                                        <button type="button" class="btn btn-secondary btn-sm me-2" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="right" data-bs-content="{{ $cpn->details->terms_and_conditions }}">Terms & Condition</button>
+	                                    </div>
+	                                </div>
+	                            </div>
+	                        </div>
+	                        @endforeach
+
+	                        <input type="hidden" name="coupon_counter" id="coupon_counter" value="{{$counter}}">
+	                    </div>
+					</div>
 				</div>
 
 				<div class="col-lg-6">
@@ -230,74 +217,52 @@
 
 								<tr class="cart_item">
 									<td class="cart-product-name">
-										<strong>Shipping</strong>
+										<strong>Shipping Fee</strong>
 									</td>
 
 									<td class="cart-product-name">
-										<input type="hidden" id="sf_discount_amount" value="0">
-                                        <input type="hidden" id="sf_discount_coupon" value="0">
-                                        <input type="text" id="delivery_fee" name="delivery_fee" value="0">
+                                        <input type="hidden" id="delivery_fee" name="delivery_fee" value="0">
 										<span class="amount" id="shipping_fee">₱0.00</span>
 									</td>
 								</tr>
+
+								<tr class="cart_item" id="tr_sf_discount" style="display:none;">
+									<td class="cart-product-name">
+										<strong>Shipping Fee Discount</strong>
+									</td>
+
+									<td class="cart-product-name">
+										<input type="hidden" name="sf_discount_amount" id="sf_discount_amount" value="0">
+                                        <input type="hidden" id="sf_discount_coupon" value="0">
+										<span class="amount" id="shipping_fee_disocunt">₱0.00</span>
+									</td>
+								</tr>
+
 								<tr class="cart_item">
 									<td class="cart-product-name">
 										<strong>Total</strong>
 									</td>
 
 									<td class="cart-product-name">
-										<input type="text" name="total_amount" value="{{$subtotal}}">
-										<input type="hidden" name="delivery_fee" value="0">
+										<input type="hidden" name="total_amount" id="total_amount" value="{{$subtotal}}">
 										<span class="amount color lead"><strong><p id="span_total_amount">₱{{ number_format($subtotal-$cart->coupon_discount,2) }}</p></strong></span>
 									</td>
 								</tr>
 							</tbody>
 						</table>
 					</div>
-
-					<div class="accordion clearfix">
-						<div class="accordion-header">
-							<div class="accordion-icon">
-								<i class="accordion-closed icon-line-minus"></i>
-								<i class="accordion-open icon-line-check"></i>
-							</div>
-							<div class="accordion-title">
-								Cash On Delivery
-							</div>
-						</div>
-						<div class="accordion-content clearfix">Donec sed odio dui. Nulla vitae elit libero, a pharetra augue. Nullam id dolor id nibh ultricies vehicula ut id elit. Integer posuere erat a ante venenatis dapibus posuere velit aliquet.</div>
-
-						<div class="accordion-header">
-							<div class="accordion-icon">
-								<i class="accordion-closed icon-line-minus"></i>
-								<i class="accordion-open icon-line-check"></i>
-							</div>
-							<div class="accordion-title">
-								Cheque Payment
-							</div>
-						</div>
-						<div class="accordion-content clearfix">Integer posuere erat a ante venenatis dapibus posuere velit aliquet. Duis mollis, est non commodo luctus. Aenean lacinia bibendum nulla sed consectetur. Cras mattis consectetur purus sit amet fermentum.</div>
-
-						<div class="accordion-header">
-							<div class="accordion-icon">
-								<i class="accordion-closed icon-line-minus"></i>
-								<i class="accordion-open icon-line-check"></i>
-							</div>
-							<div class="accordion-title">
-								Paypal
-							</div>
-						</div>
-						<div class="accordion-content clearfix">Nullam id dolor id nibh ultricies vehicula ut id elit. Integer posuere erat a ante venenatis dapibus posuere velit aliquet. Duis mollis, est non commodo luctus. Aenean lacinia bibendum nulla sed consectetur.</div>
-					</div>
-					<button type="submit" class="button button-3d float-end" onclick="place_order();">Place Order</button>
+					<button type="button" class="button button-3d float-end" onclick="place_order();">Place Order</button>
 				</div>
 			</div>
 		</form>
 	</div>
 </div>
 
-<input type="text" id="totalAmountWithoutCoupon" value="{{number_format($subtotal,2,'.','')}}">
-<input type="text" id="totalQty" value="{{$totalqty}}">
+<input type="hidden" id="totalAmountWithoutCoupon" value="{{number_format($subtotal,2,'.','')}}">
+<input type="hidden" id="totalQty" value="{{$totalqty}}">
+
+<input type="hidden" id="coupon_limit" value="{{ Setting::info()->coupon_limit }}">
+<input type="hidden" id="solo_coupon_counter" value="{{$soloCouponCounter}}">
 
 @include('theme.ecommerce.pages.modal')
 @endsection
@@ -306,52 +271,58 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
 
 <script>
+	function shipping_type(stype){
+		$('#shipping_type').val(stype);
+	}
+
+
+	$('#location').change(function(){
+		var stype = $('#shipping_type').val();
+		var val   = ($(this).val()).split('|');
+
+		var dfee  = parseFloat(val[1])
+           
+        if(stype == 'stp'){
+        	$('#shipping_fee').html('₱0.00');
+			$('#delivery_fee').val(0);
+        } else {
+        	$('#shipping_fee').html('₱'+addCommas(dfee.toFixed(2)));
+			$('#delivery_fee').val(dfee);
+        }
+
+        compute_total();
+    });
 
 	function place_order() {   
-	    // if (!$("input[name='shipping_type']:checked").val()) {
-	    //     swal({
-	    //         title: '',
-	    //         text: "Please select a delivery method!",         
-	    //     });
 
-	    //    return false;
-	    // }
+	    var stype = $('#shipping_type').val(); 
 
-	    // var st = $('input[name="shipping_type"]:checked').val(); 
-	    // if(st == 'd2d'){
-	    //     if($('#location').val()==''){
-	    //         swal({
-	    //             title: '',
-	    //             text: 'Please select your city/province.',
-	    //             icon: 'warning'
-	    //         });              
-	    //         return false;
-	    //     }
-	    // }
+	    if(stype == 'd2d'){
 
-	    // if($('#address_street').val()==''){
-	    //     swal({
-	    //         title: '',
-	    //         text: 'Please enter Address 1.',
-	    //         icon: 'warning'
-	    //     });
-	    //     return false;
-	    // }
+	        if($('#location').val() == ""){
+	            swal({
+	                title: '',
+	                text: 'Please select your municipality.',
+	                icon: 'warning'
+	            });              
+	            return false;
+	        }
+	    }
 
-	    // if($('#address_municipality').val()==''){
-	    //     swal({
-	    //         title: '',
-	    //         text: 'Please enter Address 2.',
-	    //         icon: 'warning'
-	    //     });
-	    //     return false;
-	    // }
+	    if($('#address_street').val()==''){
+	        swal({
+	            title: '',
+	            text: 'Please enter Address.',
+	            icon: 'warning'
+	        });
+	        return false;
+	    }
 
-	    // $('#delivery_address').val($('#address_street').val()+', '+$('#address_municipality').val()+', '+$('#location option:selected').text());
-	    // $('#sbtbtn').hide();
-	    // $('#sbt_loading').show();
 	    $('#chk_form').submit();
 	}
+
+
+
 
 	$(document).ready(function(){
 		$('[data-bs-toggle="popover"]').popover();
@@ -369,15 +340,6 @@
         return x1 + x2;
     }
 
-	$('#sfee').change(function(){
-		var rate = parseFloat($(this).val());
-		
-		$('#shipping_fee').html('₱'+addCommas(rate.toFixed(2)));
-		$('#delivery_fee').val(rate);
-		//$('#sf_discount_amount').val(rate);
-
-		compute_total();
-	});
 
 	function coupon_counter(cid){
         var limit = $('#coupon_limit').val();
@@ -421,6 +383,15 @@
     }
 
     function myCoupons(){
+    	if($('#location').val() == ""){
+            swal({
+                title: '',
+                text: 'Please select your municipality.',
+                icon: 'warning'
+            });              
+            return false;
+        }
+
         var totalAmount = $('#totalAmountWithoutCoupon').val();
         var totalQty = $('#totalQty').val();
 
@@ -531,15 +502,6 @@
                 return false;
             }
 
-            // check if has selected delivery location
-            if (!$("input[name='shipping_type']:checked").val()) {
-                swal({
-                    title: '',
-                    text: "Please select a delivery option!",         
-                });
-                return false;
-            }
-
             // check if selected coupon applicable on selected delivery location
             var option = $('input[name="shipping_type"]:checked').val();
             if(option == 'storepickup'){
@@ -602,15 +564,15 @@
 
                         $('#sf_discount_amount').val(dfee);
 
-                        $('#sf_discount_row').css('display','table-row');
-                        $('#sf_discount_span').html(addCommas(dfee.toFixed(2)));
+                        $('#tr_sf_discount').css('display','table-row');
+                        $('#shipping_fee_disocunt').html('₱'+addCommas(dfee.toFixed(2)));
                     }
 
                     if(sf_type == 'partial'){
                         $('#sf_discount_amount').val(sf_discount.toFixed(2));
 
-                        $('#sf_discount_row').css('display','table-row');
-                        $('#sf_discount_span').html(addCommas(sf_discount.toFixed(2)));
+                        $('#tr_sf_discount').css('display','table-row');
+                        $('#shipping_fee_disocunt').html('₱'+addCommas(sf_discount.toFixed(2)));
                     }
 
                     $('#couponBtn'+cid).prop('disabled',true);
@@ -629,7 +591,7 @@
         $(document).on('click', '.sfCouponRemove', function(){  
             var id = $(this).attr("id");  
 
-            $('#sf_discount_row').css('display','none');
+            $('#tr_sf_discount').css('display','none');
             
             $('#sf_discount_amount').val(0);
             var totalsfdiscoutcounter = $('#sf_discount_coupon').val();
@@ -650,10 +612,10 @@
 
 
         function compute_total(){
+
             var delivery_fee = parseFloat($('#delivery_fee').val());
             var delivery_discount = parseFloat($('#sf_discount_amount').val());
 
-            console.log(delivery_discount);
 
             var orderAmount = parseFloat($('#totalAmountWithoutCoupon').val());
             var couponDiscount = parseFloat($('#coupon_total_discount').val());

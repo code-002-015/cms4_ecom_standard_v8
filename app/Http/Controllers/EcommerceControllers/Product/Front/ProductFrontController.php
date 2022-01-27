@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Product\Front;
+namespace App\Http\Controllers\EcommerceControllers\Product\Front;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -76,12 +76,8 @@ class ProductFrontController extends Controller
     }
     
 
-    public function list(Request $request) {
-        //logger($request);
-        // $page = new Page();
-        // $page->name = 'Order';
-        // $pageLimit = 16;
-
+    public function list(Request $request)
+    {
         $page = new Page();
         $page->name = 'Order';
         $pageLimit = 40;
@@ -171,7 +167,7 @@ class ProductFrontController extends Controller
         }
         // End Product Categories
 
-        return view('theme.'.env('FRONTEND_TEMPLATE').'.ecommerce.product.product-list',compact('brands','products','categories','total_product','page','request'));
+        return view('theme.ecommerce.pages.product-list',compact('brands','products','categories','total_product','page','request'));
 
     }
 
