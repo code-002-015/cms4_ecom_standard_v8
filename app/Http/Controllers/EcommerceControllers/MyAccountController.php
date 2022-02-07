@@ -28,50 +28,44 @@ class MyAccountController extends Controller
             $selectedTab = ($request->tab == 'my-address') ? 2 : $selectedTab;
         }
 
-        return view('theme.ecommerce.pages.manage-account', compact('member', 'user', 'selectedTab'));
+        return view('theme.ecommerce.pages.customer.manage-account', compact('member', 'user', 'selectedTab'));
     }
 
     public function update_personal_info(Request $request)
     {
-        if($request->is_org==1){
-            $user_add = User::whereId(Auth::id())->update([
-                'organization' => $request->organization,
-                'birthday' => $request->birthday,
-                'contact_person' => $request->contact_person
-            ]);
-        }
-        else{
-            $user_add = User::whereId(Auth::id())->update([
-                'firstname' => $request->firstname,
-                'lastname' => $request->lastname,
-                'birthday' => $request->birthday
-            ]);
-        }
+        User::whereId(Auth::id())->update([
+            'firstname' => $request->firstname,
+            'lastname' => $request->lastname,
+        ]);
+
         return redirect()->back()->with('success-personal', 'Personal information has been updated');
     }
 
     public function update_contact_info(Request $request)
     {
         $route = route('my-account.manage-account').'?tab=contact-information';
-        $user_add = User::whereId(Auth::id())->update([
-            'contact_tel' => $request->tel,
-            'contact_mobile' => $request->mobile,
-            'contact_fax' => $request->fax,
+        User::whereId(Auth::id())->update([
+            'mobile' => $request->mobile,
+            'phone' => $request->phone,
         ]);
 
-        return redirect($route)->with('success-contact', 'Personal information has been updated');
+        return redirect()->back()->with('success-personal', 'Contact information has been updated');
     }
 
     public function update_address_info(Request $request)
     {
-        $route = route('my-account.manage-account').'?tab=tab=my-address';
-        $user_add = User::whereId(Auth::id())->update([
-            'address_street' => $request->address_delivery_street,
-            'address_city' => $request->address_delivery_city,
-            'address_region' => $request->address_delivery_province,
+        $route = route('my-account.manage-account').'?tab=my-address';
+        User::whereId(Auth::id())->update([
+            'address_street' => $request->address_street,
+            'address_city' => $request->address_city,
+            'address_municipality' => $request->address_municipality,
+            'address_zip' => $request->address_zip
         ]);
 
-        return redirect($route)->with('success-address', 'Personal information has been updated');
+        return back()->with([
+            'tab' => 'my-address',
+            'success-address' =>  'Address information has been updated.'
+        ]);
     }
 
     public function change_password()
@@ -79,7 +73,7 @@ class MyAccountController extends Controller
         $page = new Page();
         $page->name = 'Change Password';
 
-        return view('theme.ecommerce.pages.change-password',compact('page'));
+        return view('theme.ecommerce.pages.customer.change-password',compact('page'));
     }
 
     public function update_password(Request $request)
@@ -92,12 +86,12 @@ class MyAccountController extends Controller
             }],
             'password' => [
                 'required',
-                'min:10',
-                'max:150',
+                'min:8',
+                'max:150', 
                 'regex:/[a-z]/', // must contain at least one lowercase letter
                 'regex:/[A-Z]/', // must contain at least one uppercase letter
                 'regex:/[0-9]/', // must contain at least one digit
-                'regex:/[@$!%*#?&]/', // must contain a special character
+                'regex:/[@$!%*#?&]/', // must contain a special character              
             ],
             'confirm_password' => 'required|same:password',
         ]);
@@ -106,6 +100,5 @@ class MyAccountController extends Controller
 
         return redirect()->back()->with('success', 'Password has been updated');
     }
-
 
 }

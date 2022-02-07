@@ -131,8 +131,10 @@
 						</div>
 						@if(Auth::check())
 	                    <a href="#" onclick="myCoupons()"> Click here to view coupons</a>
+	                    <input type="hidden" id="hasLogin" value="1">
 	                    @else
 	                    <a href="#" onclick="login_modal()"> Click here to view coupons</a>
+	                    <input type="hidden" id="hasLogin" value="0">
 	                    @endif
 					</div>
 
@@ -210,7 +212,9 @@
 
 	<script>
 	
-
+		function login_modal(){
+            $('#modalLoginLink').modal('show');
+        }
 
 		function FormatAmount(number, numberOfDigits) {
 
@@ -677,6 +681,16 @@
 
 
 		$('#couponManualBtn').click(function(){
+
+			var hasLogin = parseFloat($('#hasLogin').val());
+			if(hasLogin < 1){
+				swal({
+                    title: '',
+                    text: "Please login first to see available coupons.",         
+                });
+                return false;
+			}
+
             var couponCode = $('#coupon_code').val();
             var grandtotal = parseFloat($('#grandTotal').val());
 
