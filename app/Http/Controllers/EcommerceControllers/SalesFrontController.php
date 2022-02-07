@@ -18,7 +18,7 @@ class SalesFrontController extends Controller
 {
     public function orders(){
 
-        $sales = SalesHeader::where('user_id',Auth::id())->orderBy('id','desc')->paginate(2);
+        $sales = SalesHeader::where('user_id',Auth::id())->orderBy('id','desc')->paginate(10);
 
         $page = new Page();
         $page->name = 'Sales Transaction';

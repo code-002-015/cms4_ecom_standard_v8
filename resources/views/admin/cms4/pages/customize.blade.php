@@ -46,8 +46,9 @@
                     <div class="form-group">
                         <label class="d-block">Page Label *</label>
                         <input type="text" class="form-control @error('label') is-invalid @enderror" name="label" id="label" value="{{ old('label', $page->label) }}" required>
-                        @hasError(['inputName' => 'label'])
-                        @endhasError
+                        @error('label')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
                     </div>
                     @php
                         $album_active = 'active';
@@ -97,14 +98,10 @@
                                     @endforelse
                                 </select>
                             </div>
-                            {{-- <div class="col-md-2">
-                                <div class="col-md-2" id="preview_btn_div" @if(!$page->has_slider() || empty($page->album_id)) style="display:none;" @endif>
-                                    <a href="#" data-toggle="modal" data-target="#preview-banner" id="preview_btn" class="btn btn-xs btn-success" data-id="{{$page->album_id}}">Preview</a>
-                                </div>
-                            </div> --}}
                         </div>
-                        @hasError(['inputName' => 'album_id'])
-                        @endhasError
+                        @error('album_id')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
                     </div>
                 </div>
                 <div class="col-lg-12">
@@ -132,22 +129,25 @@
                     <div class="form-group">
                         <label class="d-block">Title <code>(meta title)</code></label>
                         <input type="text" class="form-control @error('meta_title') is-invalid @enderror" name="meta_title" value="{{ old('meta_title',$page->meta_title) }}">
-                        @hasError(['inputName' => 'meta_title'])
-                        @endhasError
+                        @error('meta_title')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
                         <p class="tx-11 mg-t-4">{{ __('standard.seo.title') }}</p>
                     </div>
                     <div class="form-group">
                         <label class="d-block">Description <code>(meta description)</code></label>
                         <textarea rows="3" class="form-control @error('meta_description') is-invalid @enderror" name="meta_description">{!! old('meta_description', $page->meta_description) !!}</textarea>
-                        @hasError(['inputName' => 'meta_description'])
-                        @endhasError
+                        @error('meta_description')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
                         <p class="tx-11 mg-t-4">{{ __('standard.seo.description') }}</p>
                     </div>
                     <div class="form-group">
                         <label class="d-block">Keywords <code>(meta keywords)</code></label>
                         <textarea rows="3" class="form-control @error('meta_keyword') is-invalid @enderror" name="meta_keyword">{!! old('meta_keyword', $page->meta_keyword) !!}</textarea>
-                        @hasError(['inputName' => 'meta_keyword'])
-                        @endhasError
+                        @error('meta_keyword')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
                         <p class="tx-11 mg-t-4">{{ __('standard.seo.keywords') }}</p>
                     </div>
                 </div>
