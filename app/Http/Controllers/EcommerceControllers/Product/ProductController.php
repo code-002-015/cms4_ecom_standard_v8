@@ -69,14 +69,14 @@ class ProductController extends Controller
         $equalQueryFields = ['category_id', 'status', 'created_by','brand'];
 
         $listing = new ListingHelper( 'desc', 10, 'updated_at', $customConditions);
-        $products = $listing->advance_search('App\EcommerceModel\Product', $this->advanceSearchFields, $equalQueryFields);
+        $products = $listing->advance_search('App\Models\Product', $this->advanceSearchFields, $equalQueryFields);
 
         $filter = $listing->get_filter($this->searchFields);
 
         $advanceSearchData = $listing->get_search_data($this->advanceSearchFields);
-        $uniqueProductByCategory = $listing->get_unique_item_by_column('App\EcommerceModel\Product', 'category_id');
-        $uniqueProductByBrand = $listing->get_unique_item_by_column('App\EcommerceModel\Product', 'brand');
-        $uniqueProductByUser = $listing->get_unique_item_by_column('App\EcommerceModel\Product', 'created_by');
+        $uniqueProductByCategory = $listing->get_unique_item_by_column('App\Models\Product', 'category_id');
+        $uniqueProductByBrand = $listing->get_unique_item_by_column('App\Models\Product', 'brand');
+        $uniqueProductByUser = $listing->get_unique_item_by_column('App\Models\Product', 'created_by');
 
         $searchType = 'advance_search';
 

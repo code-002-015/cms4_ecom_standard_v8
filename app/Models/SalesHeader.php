@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+use DB;
+
 class SalesHeader extends Model
 {
     use SoftDeletes;
@@ -72,9 +74,68 @@ class SalesHeader extends Model
 
     }
 
-    // public static function first_payment($id){
-    //     $data = \App\EcommerceModel\Sales::where('sales_header_id',$id)->get();
-    //     return $data;
-    // }
+    public static function media_color($media) {
+
+        switch($media){
+            case 'Facebook':
+                return '#3b5998';
+            break;
+
+            case 'Twitter':
+                return '#00aced';
+            break;
+
+            case 'Youtube':
+                return '#bb0000';
+            break;
+
+            case 'Instagram':
+                return '#517fa4';
+            break;
+
+            default:
+                return '#004E1F';
+        }
+    }
+
+    public static function random_color()
+    {
+        return '#' . str_pad(dechex(mt_rand(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT);
+    }
+
+    public static function monthly_sales($yr)
+    {
+        $total_sales = '';
+        $month_num  = date('m');
+        for ($x = 1; $x <= $month_num; $x++) {
+
+            $sales = DB::select("select sum(net_amount) as total_sale from ecommerce_sales_headers where year(created_at) = '$yr' and month(created_at) = $x and status = 'active' and payment_status = 'PAID' ");
+
+            if(isset($sales[0]->total_sale)){
+                $total = number_format($sales[0]->total_sale,2,'.','');
+            } else {
+                $total = 0;
+            }
+
+            $total_sales .= $total.',';
+        }
+
+        return $total_sales;
+    }
+
+    public static function socmed_order_volume($media,$startdate,$enddate)
+    {
+        $qry ="select sum(d.qty) as volume from ecommerce_sales_details d left join ecommerce_sales_headers h on h.id = d.sales_header_id where h.status = 'active' and h.payment_status = 'PAID' and h.created_at >='".date('Y-m-d',strtotime($startdate))." 00:00:00.000' and h.created_at <='".date('Y-m-d',strtotime($enddate))." 23:59:59.999' ";
+
+        if($media == ''){
+            $qry .= " and h.origin IS NULL";
+        } else {
+            $qry .= " and h.origin = '$media'";
+        }
+
+        $order = DB::select($qry);
+        
+        return number_format($order[0]->volume,0);  
+    }
 
 }

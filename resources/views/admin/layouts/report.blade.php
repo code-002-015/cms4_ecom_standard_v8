@@ -29,10 +29,10 @@
    
             <table width="100%" align="center" class="text-center">
                 <tr>
-                    <td style="font-size:25px;"><b>SYSU International, Inc.</b></td>
+                    <td style="font-size:25px;"><b>{{ config('app.name', 'CMS') }}</b></td>
                 </tr>
                 <tr>
-                    <td style="font-size:15px;">145 Panay Ave. Quezon City 1008 Philippines</td>
+                    <td style="font-size:15px;">{{ Setting::info()->company_address }}</td>
                 </tr>
             </table>
         

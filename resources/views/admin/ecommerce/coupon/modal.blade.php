@@ -93,8 +93,8 @@
                                                         @if (\Route::current()->getName() == 'cart.front.show')
                                                             <button type="button" id="couponBtn{{$coupon->coupon_id}}" class="btn btn-sm btn-primary" onclick="use_coupon('{{$coupon->coupon_id}}')">Use Now</button>
                                                         @else
-                                                            <button type="button" id="couponBtn{{$coupon->coupon_id}}" class="btn btn-sm btn-primary" onclick="use_coupon('{{$coupon->coupon_id}}')" style="display: @if(\App\EcommerceModel\CouponCart::coupon_exist($coupon->coupon_id) > 0) none @endif;">Use Now</button>
-                                                            <span class="text-success" id="couponSpan{{$coupon->coupon_id}}" style="display: @if(\App\EcommerceModel\CouponCart::coupon_exist($coupon->coupon_id) == 0) none @endif;">Already Use</span>
+                                                            <button type="button" id="couponBtn{{$coupon->coupon_id}}" class="btn btn-sm btn-primary" onclick="use_coupon('{{$coupon->coupon_id}}')" style="display: @if(\App\Models\CouponCart::coupon_exist($coupon->coupon_id) > 0) none @endif;">Use Now</button>
+                                                            <span class="text-success" id="couponSpan{{$coupon->coupon_id}}" style="display: @if(\App\Models\CouponCart::coupon_exist($coupon->coupon_id) == 0) none @endif;">Already Use</span>
                                                         @endif
                                                         
                                                     @endif

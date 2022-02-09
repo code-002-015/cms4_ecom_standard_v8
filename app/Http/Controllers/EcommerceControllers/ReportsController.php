@@ -288,6 +288,79 @@ class ReportsController extends Controller
 
     }
 
+
+    public function top_products(Request $request)
+    {
+        $qry = "select sd.product_name, count(sh.id) total_orders, sum(sd.price*sd.qty) total_sales, sum(sd.qty) total_volume, p.weight from ecommerce_sales_details sd left join ecommerce_sales_headers sh on sh.id = sd.sales_header_id left join products as p on p.id = sd.product_id where sh.status = 'active' and sh.payment_status = 'PAID' ";
+
+        if(isset($_GET['startdate']) && strlen($_GET['startdate'])>=1){
+            $startDate = date('Y-m-d',strtotime($_GET['startdate']));
+            $endDate = date('Y-m-d',strtotime($_GET['enddate']));
+
+            $qry.= " and sh.created_at >='".$startDate." 00:00:00.000' and sh.created_at <='".$endDate." 23:59:59.999'";
+        } else {
+            $firstDayOfMonth = new Carbon('first day of this month');
+
+            $startDate = $firstDayOfMonth->format('Y-m-d');
+            $endDate   = Carbon::today()->format('Y-m-d');
+
+            $qry.= " and sh. created_at >='".$startDate." 00:00:00.000' and sh.created_at <='".$endDate." 23:59:59.999'";
+        }
+
+        $qry .= " group by sd.product_id order by total_sales desc ";
+        $rs = DB::select($qry);
+
+        return view('admin.reports.sales_top_products',compact('rs','startDate','endDate'));
+    }
+
+    public function sales_social(Request $request)
+    {
+        $qry = "select origin, count(id) total_order,sum(gross_amount) total_revenue from ecommerce_sales_headers where status = 'active' and payment_status = 'PAID' ";
+
+        if(isset($_GET['startdate']) && strlen($_GET['startdate'])>=1){
+            $startDate = date('Y-m-d',strtotime($_GET['startdate']));
+            $endDate = date('Y-m-d',strtotime($_GET['enddate']));
+
+            $qry.= " and created_at >='".$startDate." 00:00:00.000' and created_at <='".$endDate." 23:59:59.999'";
+        } else {
+            $firstDayOfMonth = new Carbon('first day of this month');
+
+            $startDate = $firstDayOfMonth->format('Y-m-d');
+            $endDate   = Carbon::today()->format('Y-m-d');
+
+            $qry.= " and created_at >='".$startDate." 00:00:00.000' and created_at <='".$endDate." 23:59:59.999'";
+        }
+
+        $qry .= " group by origin";
+        $rs = DB::select($qry);
+
+        return view('admin.reports.sales_per_social_media',compact('rs','startDate','endDate'));
+    }
+
+    public function sales_category(Request $request)
+    {
+        $qry = "select sd.product_category, pcat.name, sum(sd.price*sd.qty) total_sales, count(sh.id) total_orders, sum(sd.qty) total_volume from ecommerce_sales_details sd left join ecommerce_sales_headers sh on sh.id = sd.sales_header_id left join product_categories as pcat on pcat.id = sd.product_category where sh.status = 'active' and sh.payment_status = 'PAID' ";
+
+        if(isset($_GET['startdate']) && strlen($_GET['startdate'])>=1){
+            $startDate = date('Y-m-d',strtotime($_GET['startdate']));
+            $endDate = date('Y-m-d',strtotime($_GET['enddate']));
+
+            $qry.= " and sh.created_at >='".$startDate." 00:00:00.000' and sh.created_at <='".$endDate." 23:59:59.999'";
+        } else {
+            $firstDayOfMonth = new Carbon('first day of this month');
+
+            $startDate = $firstDayOfMonth->format('Y-m-d');
+            $endDate   = Carbon::today()->format('Y-m-d');
+
+            $qry.= " and sh. created_at >='".$startDate." 00:00:00.000' and sh.created_at <='".$endDate." 23:59:59.999'";
+        }
+
+        $qry .= " group by sd.product_category";
+        $rs = DB::select($qry);
+
+        return view('admin.reports.sales_per_category',compact('rs','startDate','endDate'));
+    }
+
   
 
 }

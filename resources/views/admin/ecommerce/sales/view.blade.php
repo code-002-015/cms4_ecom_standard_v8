@@ -105,7 +105,7 @@
                             @forelse($salesDetails as $details)
                             
                             @php
-                                $discount = \App\EcommerceModel\CouponSale::total_product_discount($sales->id,$details->product_id,$details->qty,$details->price);
+                                $discount = \App\Models\CouponSale::total_product_discount($sales->id,$details->product_id,$details->qty,$details->price);
                                 $product_subtotal = $details->price*$details->qty;
 
                                 $subtotal += $product_subtotal;
@@ -166,7 +166,7 @@
                             @endforelse
 
                             @php
-                                $delivery_discount = \App\EcommerceModel\CouponSale::total_discount_delivery($sales->id);
+                                $delivery_discount = \App\Models\CouponSale::total_discount_delivery($sales->id);
                                 $net_amount = ($subtotal-$sales->discount_amount)+($sales->delivery_fee_amount-$delivery_discount);
                             @endphp
                             <hr>

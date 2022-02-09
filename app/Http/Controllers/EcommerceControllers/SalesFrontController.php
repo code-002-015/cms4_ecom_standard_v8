@@ -11,8 +11,7 @@ use App\Models\Page;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-//use App\Helpers\XDEHelper;
-//use App\EcommerceModel\DeliveryStatus;
+
 
 class SalesFrontController extends Controller
 {

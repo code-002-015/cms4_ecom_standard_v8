@@ -227,7 +227,7 @@ class Product extends Model
 
     public function reviews()
     {
-        return $this->hasMany('App\EcommerceModel\ProductReview');
+        return $this->hasMany('App\Models\ProductReview');
     }
 
     public function getRatingAttribute()
@@ -276,7 +276,7 @@ class Product extends Model
 
     public function on_sale()
     {
-        return $this->belongsTo('\App\EcommerceModel\PromoProducts','id','product_id');
+        return $this->belongsTo('\App\Models\PromoProducts','id','product_id');
     }
 
     public function getPromoDiscountAttribute()
