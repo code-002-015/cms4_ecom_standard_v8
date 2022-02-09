@@ -3,40 +3,25 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\DashboardController;
 
-use App\Http\Controllers\TemplateCategoryController;
-use App\Http\Controllers\TemplateController;
-
-
+use App\Http\Controllers\{
+    DashboardController, TemplateCategoryController, TemplateController, FrontController
+};
 
 // CMS4 Controllers
-use App\Http\Controllers\Cms4Controllers\ArticleCategoryController;
-use App\Http\Controllers\Cms4Controllers\ArticleFrontController;
-use App\Http\Controllers\Cms4Controllers\ArticleController;
-use App\Http\Controllers\Cms4Controllers\AlbumController;
-use App\Http\Controllers\Cms4Controllers\PageController;
-use App\Http\Controllers\Cms4Controllers\MenuController;
-use App\Http\Controllers\Settings\PermissionController;
-use App\Http\Controllers\Settings\AccountController;
-use App\Http\Controllers\Settings\AccessController;
-use App\Http\Controllers\Settings\UserController;
-use App\Http\Controllers\Settings\LogsController;
-use App\Http\Controllers\Settings\RoleController;
-use App\Http\Controllers\Settings\WebController;
-use App\Http\Controllers\Cms4Controllers\FileManagerController;
+use App\Http\Controllers\Cms4Controllers\{
+    ArticleCategoryController, ArticleFrontController, ArticleController, AlbumController, PageController, MenuController, FileManagerController
+};
+
+use App\Http\Controllers\Settings\{
+    PermissionController, AccountController, AccessController, UserController, LogsController, RoleController, WebController
+};
 
 
-use App\Http\Controllers\FrontController;
 use \UniSharp\LaravelFilemanager\Controllers\LfmController;
-//
 
+use App\Http\Controllers\EcommerceControllers\{CustomerFrontController, SalesFrontController};
 
-// Ecommerce Controllers
-
-
-use App\Http\Controllers\EcommerceControllers\CustomerFrontController;
-use App\Http\Controllers\EcommerceControllers\SalesFrontController;
 
 /*
 |--------------------------------------------------------------------------
@@ -129,9 +114,6 @@ Route::get('/request-demo/{id}',[FrontController::class, 'request_for_demo'])->n
 // CUSTOMER ROUTES
 Route::group(['middleware' => ['authenticated']], function () {
     Route::get('/checkout', [CartController::class, 'checkout'])->name('cart.front.checkout');
-    //    Route::post('/temp_save',[CartController::class, 'save_sales'])->name('cart.temp_sales');
-    //    Route::post('product/review/store', [ProductReviewController::class, 'store'])->name('product.review.store');
-    //    Route::get('/checkout', 'EcommerceControllers\CheckoutController@checkout')->name('cart.front.checkout');
     Route::post('/temp_save',[CartController::class, 'save_sales'])->name('cart.temp_sales');
 
 
@@ -153,8 +135,6 @@ Route::group(['middleware' => ['authenticated']], function () {
 
     Route::post('/add-manual-coupon', [CouponFrontController::class, 'add_manual_coupon'])->name('add-manual-coupon');
     Route::get('/display-collectibles', [CouponFrontController::class, 'collectibles'])->name('display.collectibles');
-
-
 
 });
 
@@ -380,6 +360,12 @@ Route::group(['prefix' => env('APP_PANEL', 'cerebro')], function (){
 
 
             Route::get('/report/stock-card/{id}', [ReportsController::class, 'stock_card'])->name('report.product.stockcard');
+
+            // Reports
+            Route::get('/admin/report/top-selling-products', [ReportsController::class, 'top_products'])->name('admin.report.top_products');
+            Route::get('/admin/report/sales-per-social-media', [ReportsController::class, 'sales_social'])->name('admin.report.sales_social');
+            Route::get('/admin/report/sales-per-branch', [ReportsController::class, 'sales_per_branch'])->name('admin.report.sales-per-branch');
+            Route::get('/admin/report/sales-per-category', [ReportsController::class, 'sales_category'])->name('admin.report.sales_category');
         ###### Ecommerce Standard Routes ######
 
 
