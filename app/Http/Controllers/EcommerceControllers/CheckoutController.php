@@ -4,15 +4,15 @@ namespace App\Http\Controllers\EcommerceControllers;
 
 use App\AutoshipModel\Autoship;
 use App\AutoshipModel\AutoshipDetail;
-use App\EcommerceModel\Cart;
-use App\EcommerceModel\SalesDetail;
+use App\Models\Cart;
+use App\Models\SalesDetail;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
-use App\EcommerceModel\SalesHeader;
-use App\EcommerceModel\Branch;
+use App\Models\SalesHeader;
+use App\Models\Branch;
 use Auth;
 use App\Deliverablecities;
 

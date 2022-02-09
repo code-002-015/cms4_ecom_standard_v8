@@ -52,7 +52,7 @@
                                     <select style="font-size:12px;width: 140px;" name="category" id="category" class="form-control input-sm">
                                         <option value="">Select</option>
                                         @php
-                                            $categories = \App\EcommerceModel\ProductCategory::orderBy('name')->get();
+                                            $categories = \App\Models\ProductCategory::orderBy('name')->get();
                                         @endphp
                                         @forelse($categories as $c)
                                             <option value="{{$c->id}}" 
@@ -68,7 +68,7 @@
                                     <select style="font-size:12px;width: 140px;" name="brand" id="brand" class="form-control input-sm">
                                         <option value="">Select</option>
                                         @php
-                                            $brands = \App\EcommerceModel\Product::distinct()->select('brand')->orderBy('brand')->get();
+                                            $brands = \App\Models\Product::distinct()->select('brand')->orderBy('brand')->get();
                                         @endphp
                                         @forelse($brands as $b)
                                             <option value="{{$b->brand}}"
@@ -84,7 +84,7 @@
                                     <select style="font-size:12px;width: 140px;" name="product" id="product" class="form-control input-sm">
                                         <option value="">Select</option>
                                         @php
-                                            $products = \App\EcommerceModel\Product::orderBy('name')->get();
+                                            $products = \App\Models\Product::orderBy('name')->get();
                                         @endphp
                                         @forelse($products as $p)
                                             <option value="{{$p->id}}"
@@ -211,7 +211,7 @@
                        
                                     <th>{{$r->payment_status}}</th>
                                     <td>{{ ucwords($r->customer_type) }}</td>
-                                    <td>{{ \App\EcommerceModel\CouponSale::coupons_used_on_sales($r->hid) }}</td>
+                                    <td>{{ \App\Models\CouponSale::coupons_used_on_sales($r->hid) }}</td>
                                    
                                     
                                 </tr>

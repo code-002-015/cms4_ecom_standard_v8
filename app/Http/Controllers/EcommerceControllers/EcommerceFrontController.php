@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\EcommerceControllers;
 
-use App\EcommerceModel\Member;
 use App\Helpers\Webfocus\Setting;
 use App\Mail\UpdatePasswordMail;
 use App\Page;

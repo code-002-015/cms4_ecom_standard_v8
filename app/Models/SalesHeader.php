@@ -72,9 +72,4 @@ class SalesHeader extends Model
 
     }
 
-    // public static function first_payment($id){
-    //     $data = \App\EcommerceModel\Sales::where('sales_header_id',$id)->get();
-    //     return $data;
-    // }
-
 }
